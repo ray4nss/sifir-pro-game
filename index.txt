@@ -5,18 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>sifir.pro</title>
     <style>
-        /* All your previous CSS goes here */
+        /* ======== START: MODIFIED STYLE ======== */
         body {
             font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 100vh;
+            /* align-items: center; REMOVED to stop vertical centering */
+            min-height: 100vh; /* CHANGED to allow the page to grow */
             margin: 0;
+            padding: 20px 0; /* ADDED for spacing */
+            box-sizing: border-box; /* ADDED for better layout calculation */
             background: linear-gradient(135deg, #ffcc70, #f471b5, #cd34b5);
             background-size: 400% 400%;
             animation: gradient 15s ease infinite;
         }
+        /* ======== END: MODIFIED STYLE ======== */
 
         @keyframes gradient {
             0% { background-position: 0% 50%; }
@@ -313,7 +316,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     
     <script>
-        // ======== Your Personal Firebase Configuration ========
         const firebaseConfig = {
           apiKey: "AIzaSyCi9OJDWllc3YG-6loSE_NAPW_XFL1rAko",
           authDomain: "sifir-pro-leaderboard.firebaseapp.com",
@@ -323,11 +325,8 @@
           appId: "1:877152351941:web:101922b746e6e6173b22ac"
         };
 
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        // =====================================================
-
 
         let num1, num2, correctAnswer;
         let score = 0;
@@ -376,7 +375,6 @@
             timer = setInterval(updateTimer, 1000);
         }
 
-        // ======== CORRECTED FUNCTION ========
         function updateTimer() {
             timeLeft--;
             document.getElementById('masa').textContent = 'Masa: ' + timeLeft;
@@ -399,7 +397,6 @@
             document.getElementById('answer').value = '';
         }
         
-        // ======== CORRECTED FUNCTION ========
         function checkIfAnswerIsComplete() {
             const userAnswer = document.getElementById('answer').value;
             const correctAnswerString = correctAnswer.toString();
@@ -456,7 +453,7 @@
         }
         
         function saveScore(score) {
-            const name = document.getElementById('nama').value;
+            const name = document.getElementById('nama').value.trim().toLowerCase();
             const kelas = document.getElementById('kelas').value;
 
             if (!name || !kelas) return;
@@ -476,7 +473,7 @@
                         .catch((error) => console.error("Error adding new score: ", error));
                     } else {
                         const doc = querySnapshot.docs[0];
-                        const existingScore = doc.data().score;
+                        const existingScore = parseInt(doc.data().score, 10);
 
                         if (score > existingScore) {
                             doc.ref.update({
