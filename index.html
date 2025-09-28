@@ -313,7 +313,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     
     <script>
-        // ======== Your Personal Firebase Configuration ========
         const firebaseConfig = {
           apiKey: "AIzaSyCi9OJDWllc3YG-6loSE_NAPW_XFL1rAko",
           authDomain: "sifir-pro-leaderboard.firebaseapp.com",
@@ -323,11 +322,8 @@
           appId: "1:877152351941:web:101922b746e6e6173b22ac"
         };
 
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        // =====================================================
-
 
         let num1, num2, correctAnswer;
         let score = 0;
@@ -376,7 +372,6 @@
             timer = setInterval(updateTimer, 1000);
         }
 
-        // ======== CORRECTED FUNCTION ========
         function updateTimer() {
             timeLeft--;
             document.getElementById('masa').textContent = 'Masa: ' + timeLeft;
@@ -399,7 +394,6 @@
             document.getElementById('answer').value = '';
         }
         
-        // ======== CORRECTED FUNCTION ========
         function checkIfAnswerIsComplete() {
             const userAnswer = document.getElementById('answer').value;
             const correctAnswerString = correctAnswer.toString();
@@ -456,7 +450,9 @@
         }
         
         function saveScore(score) {
-            const name = document.getElementById('nama').value;
+            // ======== THIS IS THE CORRECTED LINE ========
+            const name = document.getElementById('nama').value.trim().toLowerCase();
+            // ==========================================
             const kelas = document.getElementById('kelas').value;
 
             if (!name || !kelas) return;
