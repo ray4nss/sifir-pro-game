@@ -449,10 +449,9 @@
             resetGame();
         }
         
+        // ======== START: UPDATED FUNCTION ========
         function saveScore(score) {
-            // ======== THIS IS THE CORRECTED LINE ========
             const name = document.getElementById('nama').value.trim().toLowerCase();
-            // ==========================================
             const kelas = document.getElementById('kelas').value;
 
             if (!name || !kelas) return;
@@ -472,8 +471,10 @@
                         .catch((error) => console.error("Error adding new score: ", error));
                     } else {
                         const doc = querySnapshot.docs[0];
-                        const existingScore = doc.data().score;
+                        // Ensure the existing score is treated as a number
+                        const existingScore = parseInt(doc.data().score, 10);
 
+                        // Now the comparison is a reliable number vs number check
                         if (score > existingScore) {
                             doc.ref.update({
                                 score: score,
@@ -490,6 +491,7 @@
                     console.error("Error checking for existing user: ", error);
                 });
         }
+        // ======== END: UPDATED FUNCTION ========
 
         function listenForScores() {
             db.collection("scores").orderBy("score", "desc")
