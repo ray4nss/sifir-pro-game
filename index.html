@@ -94,6 +94,21 @@
             border-radius: 5px;
             padding: 5px;
         }
+        
+        /* ======== NEW/MODIFIED STYLES FOR INPUTS ======== */
+        #nama, #kelas {
+            padding: 8px;
+            font-size: 16px;
+            border: 2px solid #4b0082;
+            border-radius: 5px;
+            width: 60%; /* Adjust width as needed */
+            margin-top: 4px;
+        }
+
+        #kelas {
+            cursor: pointer;
+        }
+        /* ================================================ */
 
         .number-pad {
             display: grid;
@@ -145,6 +160,8 @@
 
         .input-group {
             margin-bottom: 10px;
+            color: #4b0082;
+            font-weight: bold;
         }
 
         .credit {
@@ -167,10 +184,6 @@
             padding-top: 10px;
         }
 
-        .password-container {
-            display: none; /* Hide this as it's not secure on the frontend */
-        }
-
         /* Styles for the leaderboard table */
         #leaderboard {
             width: 100%;
@@ -189,7 +202,7 @@
             color: white;
         }
 
-        /* ======== NEW STYLES FOR SCROLLABLE LEADERBOARD ======== */
+        /* STYLES FOR SCROLLABLE LEADERBOARD */
         #rankings {
             border: 2px solid #4b0082;
             border-radius: 8px;
@@ -218,7 +231,6 @@
         #leaderboard th:nth-child(2), #leaderboard td:nth-child(2) { width: 40%; } /* Name */
         #leaderboard th:nth-child(3), #leaderboard td:nth-child(3) { width: 20%; } /* Kelas */
         #leaderboard th:nth-child(4), #leaderboard td:nth-child(4) { width: 20%; } /* Score */
-        /* ======================================================= */
 
     </style>
 </head>
@@ -235,12 +247,25 @@
 
     <div id="game-container" class="container" style="display: none;">
         <div class="input-group">
-            <label for="nama">Nama:</label>
-            <input type="text" id="nama" required>
+            <label for="nama">Nama:</label><br>
+            <input type="text" id="nama" required maxlength="10">
         </div>
         <div class="input-group">
-            <label for="kelas">Kelas:</label>
-            <input type="text" id="kelas" required>
+            <label for="kelas">Kelas:</label><br>
+            <select id="kelas" required>
+                <option value="" disabled selected>Pilih Kelas</option>
+                <option value="4 Abagos">4 Abagos</option>
+                <option value="4 Aparu">4 Aparu</option>
+                <option value="4 Abaal">4 Abaal</option>
+                <option value="5 Abagos">5 Abagos</option>
+                <option value="5 Aparu">5 Aparu</option>
+                <option value="5 Abaal">5 Abaal</option>
+                <option value="6 Abagos">6 Abagos</option>
+                <option value="6 Aparu">6 Aparu</option>
+                <option value="6 Abaal">6 Abaal</option>
+                <option value="Guru">Guru</option>
+                <option value="Pelawat">Pelawat</option>
+            </select>
         </div>
         <div class="control-buttons">
             <button id="start">Start</button>
@@ -277,7 +302,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    </tbody>
+                </tbody>
             </table>
         </div>
 
@@ -370,8 +395,8 @@
         }
 
         function generateQuestion() {
-            num1 = Math.floor(Math.random() * 8) + 2;
-            num2 = Math.floor(Math.random() * 9) + 1;
+            num1 = Math.floor(Math.random() * 8) + 2; // Generates numbers between 2 and 9
+            num2 = Math.floor(Math.random() * 9) + 1; // Generates numbers between 1 and 9
             correctAnswer = num1 * num2;
             document.getElementById('question').textContent = `${num1} x ${num2}`;
             document.getElementById('answer').value = '';
@@ -446,7 +471,7 @@
         }
 
         function listenForScores() {
-            // UPDATED: Removed .limit(20) to fetch all scores for scrolling
+            // Fetches all scores and orders them for scrolling
             db.collection("scores").orderBy("score", "desc")
                 .onSnapshot((querySnapshot) => {
                     const leaderboardBody = document.querySelector('#leaderboard tbody');
