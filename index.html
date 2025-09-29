@@ -44,17 +44,9 @@
             text-shadow: 2px 2px #ff6347; /* Tomato */
         }
 
-        .sifir {
-            color: #4b0082; /* Indigo */
-        }
-
-        .dot {
-            color: #ff6347; /* Tomato */
-        }
-
-        .pro {
-            color: #32CD32; /* Lime Green */
-        }
+        .sifir { color: #4b0082; }
+        .dot { color: #ff6347; }
+        .pro { color: #32CD32; }
 
         .menu {
             display: flex;
@@ -81,7 +73,7 @@
         #question, #masa, #markah {
             font-size: 24px;
             margin-bottom: 10px;
-            color: #4b0082; /* Indigo */
+            color: #4b0082;
         }
 
         #answer {
@@ -89,7 +81,7 @@
             width: 100px;
             text-align: center;
             margin-bottom: 10px;
-            border: 2px solid #4b0082; /* Indigo */
+            border: 2px solid #4b0082;
             border-radius: 5px;
             padding: 5px;
         }
@@ -99,13 +91,11 @@
             font-size: 16px;
             border: 2px solid #4b0082;
             border-radius: 5px;
-            width: 60%; /* Adjust width as needed */
+            width: 60%;
             margin-top: 4px;
         }
 
-        #kelas {
-            cursor: pointer;
-        }
+        #kelas { cursor: pointer; }
 
         .number-pad {
             display: grid;
@@ -123,13 +113,13 @@
             border: none;
             border-radius: 5px;
             color: white;
-            background-color: #4b0082; /* Indigo */
+            background-color: #4b0082;
             transition: background-color 0.3s, transform 0.3s;
         }
 
         .num-btn:hover, .func-btn:hover {
             transform: scale(1.1);
-            background-color: #8a2be2; /* Blue Violet */
+            background-color: #8a2be2;
         }
 
         .control-buttons {
@@ -146,13 +136,13 @@
             border: none;
             border-radius: 5px;
             color: white;
-            background-color: #4b0082; /* Indigo */
+            background-color: #4b0082;
             transition: background-color 0.3s, transform 0.3s;
         }
 
         #start:hover, #reset:hover, #main-menu:hover {
             transform: scale(1.1);
-            background-color: #8a2be2; /* Blue Violet */
+            background-color: #8a2be2;
         }
 
         .input-group {
@@ -167,7 +157,7 @@
             left: 50%;
             transform: translateX(-50%);
             font-size: 14px;
-            color: #ff69b4; /* Colorful pink */
+            color: #ff69b4;
             font-weight: bold;
         }
 
@@ -194,7 +184,7 @@
         }
 
         #leaderboard th {
-            background-color: #4b0082; /* Indigo */
+            background-color: #4b0082;
             color: white;
         }
 
@@ -212,7 +202,7 @@
 
         #leaderboard tbody {
             display: block;
-            max-height: 135px; /* Adjust this value to fit exactly 3 rows */
+            max-height: 135px;
             overflow-y: auto;
         }
 
@@ -222,17 +212,16 @@
             table-layout: fixed;
         }
 
-        #leaderboard th:nth-child(1), #leaderboard td:nth-child(1) { width: 20%; } /* Rank */
-        #leaderboard th:nth-child(2), #leaderboard td:nth-child(2) { width: 40%; } /* Name */
-        #leaderboard th:nth-child(3), #leaderboard td:nth-child(3) { width: 20%; } /* Kelas */
-        #leaderboard th:nth-child(4), #leaderboard td:nth-child(4) { width: 20%; } /* Score */
+        #leaderboard th:nth-child(1), #leaderboard td:nth-child(1) { width: 20%; }
+        #leaderboard th:nth-child(2), #leaderboard td:nth-child(2) { width: 40%; }
+        #leaderboard th:nth-child(3), #leaderboard td:nth-child(3) { width: 20%; }
+        #leaderboard th:nth-child(4), #leaderboard td:nth-child(4) { width: 20%; }
     </style>
 </head>
 <body>
     
     <div id="menu-container" class="container">
         <h1><span class="sifir">sifir</span><span class="dot">.</span><span class="pro">pro</span></h1>
-        
         <div id="category-selection">
             <h3>Pilih Kategori Anda:</h3>
             <div class="menu">
@@ -242,72 +231,62 @@
                 <a onclick="selectCategory('Terbuka')">Terbuka (PIBG)</a>
             </div>
         </div>
-        
-        <div class="copyright">
-            Copyright: FOONE MANIKA / SPEKTRA 2024
-        </div>
+        <div class="copyright">Copyright: FOONE MANIKA / SPEKTRA 2024</div>
     </div>
+
     <div id="game-container" class="container" style="display: none;">
-        <div class="input-group">
-            <label for="nama">Nama:</label><br>
-            <input type="text" id="nama" required maxlength="10" onfocus="this.select();">
+        <div id="setup-area">
+            <div class="input-group">
+                <label for="nama">Nama:</label><br>
+                <input type="text" id="nama" required maxlength="10">
+            </div>
+            <div class="input-group">
+                <label for="kelas">Kelas:</label><br>
+                <select id="kelas" required>
+                    <option value="" disabled selected>Pilih Kelas</option>
+                    <option value="4 Abagos">4 Abagos</option>
+                    <option value="4 Aparu">4 Aparu</option>
+                    <option value="4 Abaal">4 Abaal</option>
+                    <option value="5 Abagos">5 Abagos</option>
+                    <option value="5 Aparu">5 Aparu</option>
+                    <option value="5 Abaal">5 Abaal</option>
+                    <option value="6 Abagos">6 Abagos</option>
+                    <option value="6 Aparu">6 Aparu</option>
+                    <option value="6 Abaal">6 Abaal</option>
+                    <option value="Guru">Guru</option>
+                    <option value="Pelawat">Pelawat</option>
+                </select>
+            </div>
         </div>
-        <div class="input-group">
-            <label for="kelas">Kelas:</label><br>
-            <select id="kelas" required>
-                <option value="" disabled selected>Pilih Kelas</option>
-                <option value="4 Abagos">4 Abagos</option>
-                <option value="4 Aparu">4 Aparu</option>
-                <option value="4 Abaal">4 Abaal</option>
-                <option value="5 Abagos">5 Abagos</option>
-                <option value="5 Aparu">5 Aparu</option>
-                <option value="5 Abaal">5 Abaal</option>
-                <option value="6 Abagos">6 Abagos</option>
-                <option value="6 Aparu">6 Aparu</option>
-                <option value="6 Abaal">6 Abaal</option>
-                <option value="Guru">Guru</option>
-                <option value="Pelawat">Pelawat</option>
-            </select>
-        </div>
+        
         <div class="control-buttons">
             <button id="start">Start</button>
             <button id="main-menu">Main Menu</button>
             <button id="reset">Reset</button>
         </div>
-        <div id="masa">Masa: 60</div>
-        <div id="markah">Markah: 0</div>
-        <div id="question"></div>
-        <input type="text" id="answer" readonly>
-        <div class="number-pad">
-            <button class="num-btn">7</button>
-            <button class="num-btn">8</button>
-            <button class="num-btn">9</button>
-            <button class="num-btn">4</button>
-            <button class="num-btn">5</button>
-            <button class="num-btn">6</button>
-            <button class="num-btn">1</button>
-            <button class="num-btn">2</button>
-            <button class="num-btn">3</button>
-            <button class="num-btn">0</button>
-            <button class="func-btn" id="delete">DEL</button>
+
+        <div id="game-play-area" style="display: none;">
+            <div id="masa">Masa: 60</div>
+            <div id="markah">Markah: 0</div>
+            <div id="question"></div>
+            <input type="text" id="answer" readonly>
+            <div class="number-pad">
+                <button class="num-btn">7</button> <button class="num-btn">8</button> <button class="num-btn">9</button>
+                <button class="num-btn">4</button> <button class="num-btn">5</button> <button class="num-btn">6</button>
+                <button class="num-btn">1</button> <button class="num-btn">2</button> <button class="num-btn">3</button>
+                <button class="num-btn">0</button> <button class="func-btn" id="delete">DEL</button>
+            </div>
         </div>
 
         <div id="rankings">
             <h3>Leaderboard:</h3>
             <table id="leaderboard">
                 <thead>
-                    <tr>
-                        <th>Rank</th>
-                        <th>Name</th>
-                        <th>Kelas</th>
-                        <th>Score</th>
-                    </tr>
+                    <tr><th>Rank</th><th>Name</th><th>Kelas</th><th>Score</th></tr>
                 </thead>
-                <tbody>
-                </tbody>
+                <tbody></tbody>
             </table>
         </div>
-
         <div class="credit">Created by FooneManika</div>
     </div>
 
@@ -319,7 +298,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     
     <script>
-        // ======== Your Personal Firebase Configuration ========
+        // Firebase Config
         const firebaseConfig = {
           apiKey: "AIzaSyCi9OJDWllc3YG-6loSE_NAPW_XFL1rAko",
           authDomain: "sifir-pro-leaderboard.firebaseapp.com",
@@ -328,22 +307,18 @@
           messagingSenderId: "877152351941",
           appId: "1:877152351941:web:101922b746e6e6173b22ac"
         };
-
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        // =====================================================
 
-        let num1, num2, correctAnswer;
-        let score = 0;
-        let timeLeft = 60;
-        let timer;
-        let selectedCategory = ''; // <-- NEW: To store the selected category
-
-        // Audio elements
+        // Game variables
+        let num1, num2, correctAnswer, score = 0, timeLeft = 60, timer, selectedCategory = '';
+        
+        // Element references
         const correctSound = document.getElementById('correct-sound');
         const wrongSound = document.getElementById('wrong-sound');
         const timeupSound = document.getElementById('timeup-sound');
+        const setupArea = document.getElementById('setup-area');
+        const gamePlayArea = document.getElementById('game-play-area');
 
         // Event Listeners
         document.getElementById('start').addEventListener('click', startGameSession);
@@ -351,8 +326,7 @@
         document.getElementById('main-menu').addEventListener('click', goToMainMenu);
         document.querySelectorAll('.num-btn').forEach(button => {
             button.addEventListener('click', () => {
-                const answerField = document.getElementById('answer');
-                answerField.value += button.textContent;
+                document.getElementById('answer').value += button.textContent;
                 checkIfAnswerIsComplete();
             });
         });
@@ -361,8 +335,6 @@
             answerField.value = answerField.value.slice(0, -1);
         });
         
-        // --- NEW/MODIFIED Core Functions ---
-
         function selectCategory(category) {
             selectedCategory = category;
             filterKelasDropdown();
@@ -373,44 +345,33 @@
 
         function filterKelasDropdown() {
             const kelasDropdown = document.getElementById('kelas');
-            const allOptions = kelasDropdown.options;
             kelasDropdown.value = "";
-
-            for (let i = 0; i < allOptions.length; i++) {
-                const option = allOptions[i];
-                if (option.value === "") {
-                    option.style.display = "";
-                    continue;
-                }
-
+            for (const option of kelasDropdown.options) {
+                if (option.value === "") continue;
                 let show = false;
-                if (selectedCategory === 'Tahun 4' && option.value.startsWith('4')) {
-                    show = true;
-                } else if (selectedCategory === 'Tahun 5' && option.value.startsWith('5')) {
-                    show = true;
-                } else if (selectedCategory === 'Tahun 6' && option.value.startsWith('6')) {
-                    show = true;
-                } else if (selectedCategory === 'Terbuka' && (option.value === 'Guru' || option.value === 'Pelawat')) {
-                    show = true;
-                }
+                if (selectedCategory === 'Tahun 4' && option.value.startsWith('4')) show = true;
+                else if (selectedCategory === 'Tahun 5' && option.value.startsWith('5')) show = true;
+                else if (selectedCategory === 'Tahun 6' && option.value.startsWith('6')) show = true;
+                else if (selectedCategory === 'Terbuka' && (option.value === 'Guru' || option.value === 'Pelawat')) show = true;
                 option.style.display = show ? "" : "none";
             }
         }
 
+        // MODIFIED to show/hide game areas
         function startGameSession() {
-            const name = document.getElementById('nama').value;
-            const kelas = document.getElementById('kelas').value;
-            if (!name || !kelas) {
+            if (!document.getElementById('nama').value || !document.getElementById('kelas').value) {
                 alert('Sila masukkan Nama dan Kelas.');
                 return;
             }
+            setupArea.style.display = 'none';
+            gamePlayArea.style.display = 'block';
+            document.getElementById('start').disabled = true;
+
             score = 0;
             timeLeft = 60;
             document.getElementById('markah').textContent = 'Markah: 0';
             document.getElementById('masa').textContent = 'Masa: ' + timeLeft;
-            document.getElementById('nama').disabled = true;
-            document.getElementById('kelas').disabled = true;
-            document.getElementById('start').disabled = true;
+            
             generateQuestion();
             timer = setInterval(updateTimer, 1000);
         }
@@ -426,8 +387,8 @@
         }
 
         function generateQuestion() {
-            num1 = Math.floor(Math.random() * 8) + 2; // Generates numbers between 2 and 9
-            num2 = Math.floor(Math.random() * 9) + 1; // Generates numbers between 1 and 9
+            num1 = Math.floor(Math.random() * 8) + 2;
+            num2 = Math.floor(Math.random() * 9) + 1;
             correctAnswer = num1 * num2;
             document.getElementById('question').textContent = `${num1} x ${num2}`;
             document.getElementById('answer').value = '';
@@ -435,8 +396,7 @@
         
         function checkIfAnswerIsComplete() {
             const userAnswer = document.getElementById('answer').value;
-            const correctAnswerString = correctAnswer.toString();
-            if (userAnswer.length === correctAnswerString.length) {
+            if (userAnswer.length === correctAnswer.toString().length) {
                 if (parseInt(userAnswer) === correctAnswer) {
                     score += 10;
                     document.getElementById('markah').textContent = 'Markah: ' + score;
@@ -452,21 +412,18 @@
         function endGame() {
             alert('Tahniah! Anda mendapat ' + score + ' markah.');
             saveScore(score);
-            document.getElementById('nama').disabled = false;
-            document.getElementById('kelas').disabled = false;
             document.getElementById('start').disabled = false;
             document.getElementById('question').textContent = 'Masa Tamat!';
         }
-
+        
+        // MODIFIED to show/hide game areas
         function resetGame() {
             clearInterval(timer);
-            document.getElementById('nama').disabled = false;
-            document.getElementById('kelas').disabled = false;
+            gamePlayArea.style.display = 'none';
+            setupArea.style.display = 'block';
             document.getElementById('start').disabled = false;
             document.getElementById('nama').value = '';
             document.getElementById('kelas').value = '';
-            document.getElementById('markah').textContent = 'Markah: 0';
-            document.getElementById('masa').textContent = 'Masa: 60';
             document.getElementById('question').textContent = '';
             document.getElementById('answer').value = '';
             timeLeft = 60;
@@ -477,83 +434,54 @@
             clearInterval(timer);
             document.getElementById('game-container').style.display = 'none';
             document.getElementById('menu-container').style.display = 'block';
-            selectedCategory = ''; // Reset category
-            const leaderboardBody = document.querySelector('#leaderboard tbody');
-            leaderboardBody.innerHTML = '';
+            selectedCategory = '';
+            document.querySelector('#leaderboard tbody').innerHTML = '';
             resetGame();
         }
         
-        // --- MODIFIED Leaderboard Functions ---
         function saveScore(score) {
             const name = document.getElementById('nama').value;
             const kelas = document.getElementById('kelas').value;
-
             if (!name || !kelas) return;
 
             const scoresRef = db.collection("scores");
-            scoresRef.where("name", "==", name)
-                     .where("kelas", "==", kelas)
-                     .where("category", "==", selectedCategory) // Filter by category
+            scoresRef.where("name", "==", name).where("kelas", "==", kelas).where("category", "==", selectedCategory)
                      .get()
                      .then((querySnapshot) => {
                          if (querySnapshot.empty) {
                              scoresRef.add({
-                                 name: name,
-                                 kelas: kelas,
-                                 score: score,
-                                 category: selectedCategory, // SAVE THE CATEGORY
+                                 name: name, kelas: kelas, score: score,
+                                 category: selectedCategory,
                                  timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                             })
-                             .then(() => console.log("New score saved."))
-                             .catch((error) => console.error("Error adding new score: ", error));
+                             });
                          } else {
                              const doc = querySnapshot.docs[0];
-                             const existingScore = doc.data().score;
-
-                             if (score > existingScore) {
+                             if (score > doc.data().score) {
                                  doc.ref.update({
                                      score: score,
                                      timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                                 })
-                                 .then(() => console.log("Score updated to a new high score."))
-                                 .catch((error) => console.error("Error updating score: ", error));
-                             } else {
-                                 console.log("New score is not higher. No update needed.");
+                                 });
                              }
                          }
-                     })
-                     .catch((error) => {
-                         console.error("Error checking for existing user: ", error);
                      });
         }
 
         function listenForScores() {
             if (!selectedCategory) {
-                document.querySelector('#leaderboard tbody').innerHTML = '<tr><td colspan="4">Pilih kategori untuk melihat kedudukan.</td></tr>';
+                document.querySelector('#leaderboard tbody').innerHTML = '<tr><td colspan="4">Pilih kategori.</td></tr>';
                 return;
             }
-
-            db.collection("scores")
-                .where("category", "==", selectedCategory) // THE MAIN FILTER
-                .orderBy("score", "desc")
-                .limit(100)
+            db.collection("scores").where("category", "==", selectedCategory).orderBy("score", "desc").limit(100)
                 .onSnapshot((querySnapshot) => {
                     const leaderboardBody = document.querySelector('#leaderboard tbody');
                     leaderboardBody.innerHTML = '';
                     let rank = 1;
                     if (querySnapshot.empty) {
-                        leaderboardBody.innerHTML = '<tr><td colspan="4">Tiada markah lagi untuk kategori ini. Jadilah yang pertama!</td></tr>';
+                        leaderboardBody.innerHTML = '<tr><td colspan="4">Tiada markah lagi.</td></tr>';
                     } else {
                         querySnapshot.forEach((doc) => {
                             const s = doc.data();
-                            const row = document.createElement('tr');
-                            row.innerHTML = `
-                                <td>${rank++}</td>
-                                <td>${s.name}</td>
-                                <td>${s.kelas}</td>
-                                <td>${s.score}</td>
-                            `;
-                            leaderboardBody.appendChild(row);
+                            leaderboardBody.innerHTML += `<tr><td>${rank++}</td><td>${s.name}</td><td>${s.kelas}</td><td>${s.score}</td></tr>`;
                         });
                     }
                 });
