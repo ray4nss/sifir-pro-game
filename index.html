@@ -183,6 +183,11 @@
             text-align: center;
         }
 
+        /* NEW STYLE to capitalize the name in the leaderboard */
+        #leaderboard td:nth-child(2) {
+            text-transform: capitalize;
+        }
+
         #leaderboard th {
             background-color: #4b0082;
             color: white;
@@ -437,23 +442,21 @@
             resetGame();
         }
         
-        // #################### THIS FUNCTION IS UPDATED ####################
         function saveScore(score) {
-            // MODIFIED: .trim() removes spaces, .toLowerCase() handles capitalization
             const name = document.getElementById('nama').value.trim().toLowerCase(); 
             const kelas = document.getElementById('kelas').value;
 
             if (!name || !kelas) return;
 
             const scoresRef = db.collection("scores");
-            scoresRef.where("name", "==", name) // This search is now case-insensitive
+            scoresRef.where("name", "==", name)
                      .where("kelas", "==", kelas)
                      .where("category", "==", selectedCategory)
                      .get()
                      .then((querySnapshot) => {
                          if (querySnapshot.empty) {
                              scoresRef.add({
-                                 name: name, // Saves the normalized name
+                                 name: name,
                                  kelas: kelas,
                                  score: score,
                                  category: selectedCategory,
@@ -470,7 +473,6 @@
                          }
                      });
         }
-        // ##################################################################
 
         function listenForScores() {
             if (!selectedCategory) {
