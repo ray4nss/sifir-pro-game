@@ -230,6 +230,7 @@
         <div id="category-selection">
             <h3>Pilih Kategori Anda:</h3>
             <div class="menu">
+                <a onclick="selectCategory('Tahun 3')">Tahun 3</a>
                 <a onclick="selectCategory('Tahun 4')">Tahun 4</a>
                 <a onclick="selectCategory('Tahun 5')">Tahun 5</a>
                 <a onclick="selectCategory('Tahun 6')">Tahun 6</a>
@@ -249,6 +250,9 @@
                 <label for="kelas">Kelas:</label><br>
                 <select id="kelas" required>
                     <option value="" disabled selected>Pilih Kelas</option>
+                    <option value="3 Abagos">3 Abagos</option>
+                    <option value="3 Aparu">3 Aparu</option>
+                    <option value="3 Abaal">3 Abaal</option>
                     <option value="4 Abagos">4 Abagos</option>
                     <option value="4 Aparu">4 Aparu</option>
                     <option value="4 Abaal">4 Abaal</option>
@@ -354,7 +358,8 @@
             for (const option of kelasDropdown.options) {
                 if (option.value === "") continue;
                 let show = false;
-                if (selectedCategory === 'Tahun 4' && option.value.startsWith('4')) show = true;
+                if (selectedCategory === 'Tahun 3' && option.value.startsWith('3')) show = true;
+                else if (selectedCategory === 'Tahun 4' && option.value.startsWith('4')) show = true;
                 else if (selectedCategory === 'Tahun 5' && option.value.startsWith('5')) show = true;
                 else if (selectedCategory === 'Tahun 6' && option.value.startsWith('6')) show = true;
                 else if (selectedCategory === 'Terbuka' && (option.value === 'Guru' || option.value === 'Pelawat')) show = true;
@@ -442,57 +447,67 @@
             resetGame();
         }
         
-        // THIS IS THE NEW FUNCTION
-        function saveScore(score) {
+        // THIS IS THE CORRECTED AND FINAL FUNCTION
+        function saveScore(newScore) {
             const name = document.getElementById('nama').value.trim().toLowerCase();
             const kelas = document.getElementById('kelas').value;
 
             if (!name || !kelas) return;
 
             const scoresRef = db.collection("scores");
+            const query = scoresRef.where("name", "==", name)
+                                 .where("kelas", "==", kelas)
+                                 .where("category", "==", selectedCategory);
 
-            // Step 1: Always add the new score, don't check for existing ones first.
-            scoresRef.add({
-                name: name,
-                kelas: kelas,
-                score: score,
-                category: selectedCategory,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            })
-            .then(() => {
-                // Step 2: After adding, check if cleanup is needed.
-                // Query for all scores by this same user in the same category.
-                return scoresRef.where("name", "==", name)
-                                .where("kelas", "==", kelas)
-                                .where("category", "==", selectedCategory)
-                                .get();
-            })
-            .then((querySnapshot) => {
-                // Step 3: If they have more than 3 scores, perform the cleanup.
-                if (querySnapshot.size > 3) {
-                    console.log(`Player ${name} has ${querySnapshot.size} scores. Cleaning up.`);
-                    
-                    let allPlayerScores = [];
-                    querySnapshot.forEach(doc => {
-                        allPlayerScores.push({ id: doc.id, score: doc.data().score, ref: doc.ref });
+            query.get().then(querySnapshot => {
+                const existingScores = [];
+                querySnapshot.forEach(doc => {
+                    existingScores.push({ id: doc.id, ...doc.data() });
+                });
+
+                // Sort by score ascending to easily find the lowest
+                existingScores.sort((a, b) => a.score - b.score);
+
+                if (existingScores.length < 3) {
+                    // If less than 3 scores, just add the new one
+                    scoresRef.add({
+                        name: name,
+                        kelas: kelas,
+                        score: newScore,
+                        category: selectedCategory,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     });
-
-                    // Sort the scores from highest to lowest.
-                    allPlayerScores.sort((a, b) => b.score - a.score);
-
-                    // The first entry (index 0) is the highest score. We keep it.
-                    // We delete all the others (from index 1 to the end).
-                    for (let i = 1; i < allPlayerScores.length; i++) {
-                        allPlayerScores[i].ref.delete().then(() => {
-                            console.log(`Deleted score document ${allPlayerScores[i].id}`);
+                } else {
+                    // If 3 scores exist, find the lowest one
+                    const lowestScore = existingScores[0];
+                    if (newScore > lowestScore.score) {
+                        // If new score is better than the worst score, replace it
+                        const lowestScoreDocRef = scoresRef.doc(lowestScore.id);
+                        
+                        // Use a batch write to delete the old and add the new one
+                        const batch = db.batch();
+                        batch.delete(lowestScoreDocRef);
+                        batch.set(scoresRef.doc(), { // create a new doc
+                            name: name,
+                            kelas: kelas,
+                            score: newScore,
+                            category: selectedCategory,
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp()
                         });
+
+                        batch.commit().then(() => {
+                            console.log("Replaced lowest score with the new higher score.");
+                        });
+                    } else {
+                        // New score is not better than any of the top 3, do nothing
+                        console.log("New score was not high enough to make the top 3.");
                     }
                 }
-            })
-            .catch((error) => {
-                console.error("Error processing score: ", error);
+            }).catch(error => {
+                console.error("Error managing scores: ", error);
             });
         }
+
 
         function listenForScores() {
             if (!selectedCategory) {
@@ -521,3 +536,4 @@
     </script>
 </body>
 </html>
+
