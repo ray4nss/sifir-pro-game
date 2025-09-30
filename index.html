@@ -442,7 +442,7 @@
             resetGame();
         }
         
-        // THIS FUNCTION IS CORRECT - It normalizes the name to prevent score update issues.
+        // THIS FUNCTION IS CORRECT - It uses Name + Class + Category for uniqueness.
         function saveScore(score) {
             const name = document.getElementById('nama').value.trim().toLowerCase(); 
             const kelas = document.getElementById('kelas').value;
