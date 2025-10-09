@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadual Waktu Mengajar</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            text-align: center;
+            padding: 25px;
+            background-color: #0077b6;
+            color: white;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2em;
+            font-weight: 700;
+        }
+
+        .header h2 {
+            margin: 5px 0 0;
+            font-size: 1.2em;
+            font-weight: 400;
+        }
+
+        .timetable-wrapper {
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        th, td {
+            border: 1px solid #dee2e6;
+            text-align: center;
+            padding: 12px 8px;
+            font-size: 0.9em;
+            height: 70px; /* Fixed height for rows */
+        }
+
+        th {
+            background-color: #495057;
+            color: white;
+            font-weight: 600;
+        }
+
+        td.day {
+            background-color: #6c757d;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1em;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+        }
+
+        .slot {
+            border-radius: 8px;
+            color: #fff;
+            padding: 10px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .slot:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+
+        .subject {
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .class-name {
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        /* Color Palette */
+        .mt { background-color: #00b4d8; } /* Matematik */
+        .pa-pm { background-color: #2a9d8f; } /* PA/PM */
+        .pjpk { background-color: #e76f51; } /* PJPK */
+        .sn { background-color: #9b5de5; } /* Sains */
+        
+        .rehat {
+            background-color: #fca311;
+            color: #14213d;
+            font-weight: 700;
+            font-size: 1.8em;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            border-radius: 10px;
+        }
+        
+        .empty {
+             background-color: #e9ecef;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 0.8em;
+            color: #6c757d;
+            background-color: #f8f9fa;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>Jadual Waktu Mengajar FOONE MANIKA</h1>
+            <h2>SK PEKAN TENGHILAN</h2>
+        </div>
+
+        <div class="timetable-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Hari / Masa</th>
+                        <th>7:00 - 7:30</th>
+                        <th>7:30 - 8:00</th>
+                        <th>8:00 - 8:30</th>
+                        <th>8:30 - 9:00</th>
+                        <th>9:00 - 9:30</th>
+                        <th>9:30 - 10:00</th>
+                        <th>10:00 - 10:30</th>
+                        <th>10:30 - 11:00</th>
+                        <th>11:00 - 11:30</th>
+                        <th>11:30 - 12:00</th>
+                        <th>12:00 - 12:30</th>
+                        <th>12:30 - 13:00</th>
+                        <th>13:00 - 13:30</th>
+                        <th>13:30 - 14:00</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="day">ISNIN</td>
+                        <td class="empty" colspan="3"></td>
+                        <td colspan="2">
+                            <div class="slot pa-pm">
+                                <span class="subject">PA/PM</span>
+                                <span class="class-name">3I</span>
+                            </div>
+                        </td>
+                        <td rowspan="5" class="rehat">R E H A T</td>
+                        <td class="empty" colspan="4"></td>
+                        <td colspan="3">
+                             <div class="slot mt">
+                                <span class="subject">MT</span>
+                                <span class="class-name">5I</span>
+                            </div>
+                        </td>
+                        <td class="empty"></td>
+                    </tr>
+                    <tr>
+                        <td class="day">SELASA</td>
+                        <td colspan="2">
+                            <div class="slot mt">
+                                <span class="subject">MT</span>
+                                <span class="class-name">5I</span>
+                            </div>
+                        </td>
+                        <td colspan="2">
+                            <div class="slot pjpk">
+                                <span class="subject">PJPK (PK)</span>
+                                <span class="class-name">5I</span>
+                            </div>
+                        </td>
+                        <td class="empty"></td>
+                        <td>
+                            <div class="slot mt">
+                                <span class="subject">MT</span>
+                                <span class="class-name">3I</span>
+                            </div>
+                        </td>
+                        <td colspan="2">
+                            <div class="slot pa-pm">
+                                <span class="subject">PA/PM</span>
+                                <span class="class-name">3I</span>
+                            </div>
+                        </td>
+                        <td colspan="2">
+                            <div class="slot mt">
+                                <span class="subject">MT</span>
+                                <span class="class-name">3K</span>
+                            </div>
+                        </td>
+                        <td class="empty" colspan="3"></td>
+                    </tr>
+                    <tr>
+                        <td class="day">RABU</td>
+                        <td class="empty" colspan="4"></td>
+                        <td>
+                             <div class="slot sn">
+                                <span class="subject">SN</span>
+                                <span class="class-name">3I</span>
+                            </div>
+                        </td>
+                        <td colspan="2">
+                            <div class="slot mt">
+                                <span class="subject">MT</span>
+                                <span class="class-name">3I</span>
+                            </div>
+                        </td>
+                        <td class="empty" colspan="7"></td>
+                    </tr>
+                    <tr>
+                        <td class="day">KHAMIS</td>
+                        <td class="empty"></td>
+                        <td colspan="2">
+                            <div class="slot mt">
+                                <span class="subject">MT</span>
+                                <span class="class-name">5I</span>
+                            </div>
+                        </td>
+                        <td colspan="2">
+                             <div class="slot sn">
+                                <span class="subject">SN</span>
+                                <span class="class-name">3I</span>
+                            </div>
+                        </td>
+                        <td class="empty"></td>
+                         <td colspan="2">
+                            <div class="slot pa-pm">
+                                <span class="subject">PA/PM</span>
+                                <span class="class-name">3I</span>
+                            </div>
+                        </td>
+                         <td colspan="2">
+                            <div class="slot mt">
+                                <span class="subject">MT</span>
+                                <span class="class-name">3K</span>
+                            </div>
+                        </td>
+                        <td class="empty" colspan="3"></td>
+                    </tr>
+                    <tr>
+                        <td class="day">JUMAAT</td>
+                        <td class="empty"></td>
+                        <td colspan="2">
+                             <div class="slot pa-pm">
+                                <span class="subject">PA/PM</span>
+                                <span class="class-name">3I</span>
+                            </div>
+                        </td>
+                        <td class="empty"></td>
+                        <td>
+                             <div class="slot mt">
+                                <span class="subject">MT</span>
+                                <span class="class-name">3I</span>
+                            </div>
+                        </td>
+                        <td>
+                             <div class="slot mt">
+                                <span class="subject">MT</span>
+                                <span class="class-name">3I</span>
+                            </div>
+                        </td>
+                         <td colspan="2">
+                            <div class="slot mt">
+                                <span class="subject">MT</span>
+                                <span class="class-name">3K</span>
+                            </div>
+                        </td>
+                        <td class="empty" colspan="5"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="footer">
+            Jadual waktu terjana: 18/5/2025 | aSc Jadual Waktu
+        </div>
+    </div>
+
+</body>
+</html>
