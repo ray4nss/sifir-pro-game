@@ -49,11 +49,13 @@
 
         .timetable-wrapper {
             padding: 20px;
-            overflow-x: auto;
+            overflow-x: auto; /* Membolehkan skrol mendatar */
+            -webkit-overflow-scrolling: touch; /* Untuk skrol yang lancar di iOS */
         }
 
         table {
             width: 100%;
+            min-width: 1200px; /* PERUBAHAN UTAMA: Menetapkan lebar minimum untuk jadual */
             border-collapse: collapse;
             table-layout: fixed;
         }
@@ -70,6 +72,7 @@
             background-color: #495057;
             color: white;
             font-weight: 600;
+            white-space: nowrap; /* Elak teks masa dari terpotong */
         }
 
         td.day {
