@@ -63,7 +63,7 @@
             text-align: center;
             padding: 12px 8px;
             font-size: 0.9em;
-            height: 70px; /* Fixed height for rows */
+            height: 70px;
         }
 
         th {
@@ -94,7 +94,7 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-        
+
         .slot:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 15px rgba(0,0,0,0.1);
@@ -109,13 +109,12 @@
             font-size: 0.9em;
             margin-top: 5px;
         }
-        
-        /* Color Palette */
-        .mt { background-color: #00b4d8; } /* Matematik */
-        .pa-pm { background-color: #2a9d8f; } /* PA/PM */
-        .pjpk { background-color: #e76f51; } /* PJPK */
-        .sn { background-color: #9b5de5; } /* Sains */
-        
+
+        .mt { background-color: #00b4d8; }
+        .pa-pm { background-color: #2a9d8f; }
+        .pjpk { background-color: #e76f51; }
+        .sn { background-color: #9b5de5; }
+
         .rehat {
             background-color: #fca311;
             color: #14213d;
@@ -125,11 +124,9 @@
             text-orientation: mixed;
             border-radius: 10px;
         }
-        
-        .empty {
-             background-color: #e9ecef;
-        }
-        
+
+        .empty { background-color: #e9ecef; }
+
         .footer {
             text-align: center;
             padding: 15px;
@@ -181,13 +178,13 @@
                         </td>
                         <td rowspan="5" class="rehat">R E H A T</td>
                         <td class="empty" colspan="4"></td>
-                        <td colspan="3">
-                             <div class="slot mt">
+                        <td colspan="2">
+                            <div class="slot mt">
                                 <span class="subject">MT</span>
                                 <span class="class-name">5I</span>
                             </div>
                         </td>
-                        <td class="empty"></td>
+                        <td class="empty" colspan="3"></td>
                     </tr>
                     <tr>
                         <td class="day">SELASA</td>
