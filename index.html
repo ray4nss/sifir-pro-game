@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>sifir.pro</title>
+    <title>sifir.pro (SKPTE)</title>
     <style>
-        /* All your previous CSS goes here */
         body {
             font-family: Arial, sans-serif;
             display: flex;
@@ -183,7 +182,6 @@
             text-align: center;
         }
 
-        /* NEW STYLE to capitalize the name in the leaderboard */
         #leaderboard td:nth-child(2) {
             text-transform: capitalize;
         }
@@ -226,7 +224,7 @@
 <body>
     
     <div id="menu-container" class="container">
-        <h1><span class="sifir">sifir</span><span class="dot">.</span><span class="pro">pro</span></h1>
+        <h1><span class="sifir">sifir</span><span class="dot">.</span><span class="pro">pro</span> (SKPTE)</h1>
         <div id="category-selection">
             <h3>Pilih Kategori Anda:</h3>
             <div class="menu">
@@ -250,18 +248,14 @@
                 <label for="kelas">Kelas:</label><br>
                 <select id="kelas" required>
                     <option value="" disabled selected>Pilih Kelas</option>
-                    <option value="3 Abagos">3 Abagos</option>
-                    <option value="3 Aparu">3 Aparu</option>
-                    <option value="3 Abaal">3 Abaal</option>
-                    <option value="4 Abagos">4 Abagos</option>
-                    <option value="4 Aparu">4 Aparu</option>
-                    <option value="4 Abaal">4 Abaal</option>
-                    <option value="5 Abagos">5 Abagos</option>
-                    <option value="5 Aparu">5 Aparu</option>
-                    <option value="5 Abaal">5 Abaal</option>
-                    <option value="6 Abagos">6 Abagos</option>
-                    <option value="6 Aparu">6 Aparu</option>
-                    <option value="6 Abaal">6 Abaal</option>
+                    <option value="3 Inovatif">3 Inovatif</option>
+                    <option value="3 Kreatif">3 Kreatif</option>
+                    <option value="4 Inovatif">4 Inovatif</option>
+                    <option value="4 Kreatif">4 Kreatif</option>
+                    <option value="5 Inovatif">5 Inovatif</option>
+                    <option value="5 Kreatif">5 Kreatif</option>
+                    <option value="6 Inovatif">6 Inovatif</option>
+                    <option value="6 Kreatif">6 Kreatif</option>
                     <option value="Guru">Guru</option>
                     <option value="Pelawat">Pelawat</option>
                 </select>
@@ -288,8 +282,7 @@
         </div>
 
         <div id="rankings">
-            <h3>Leaderboard:</h3>
-            <table id="leaderboard">
+            <h3>Leaderboard (SKPTE):</h3> <table id="leaderboard">
                 <thead>
                     <tr><th>Rank</th><th>Name</th><th>Kelas</th><th>Score</th></tr>
                 </thead>
@@ -318,6 +311,9 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
+
+        // CONTEXT BARU
+        const gameContext = "skpte"; 
 
         // Game variables
         let num1, num2, correctAnswer, score = 0, timeLeft = 60, timer, selectedCategory = '';
@@ -447,7 +443,6 @@
             resetGame();
         }
         
-        // THIS IS THE CORRECTED AND FINAL FUNCTION
         function saveScore(newScore) {
             const name = document.getElementById('nama').value.trim().toLowerCase();
             const kelas = document.getElementById('kelas').value;
@@ -456,8 +451,9 @@
 
             const scoresRef = db.collection("scores");
             const query = scoresRef.where("name", "==", name)
-                                 .where("kelas", "==", kelas)
-                                 .where("category", "==", selectedCategory);
+                                   .where("kelas", "==", kelas)
+                                   .where("category", "==", selectedCategory)
+                                   .where("context", "==", gameContext); 
 
             query.get().then(querySnapshot => {
                 const existingScores = [];
@@ -465,33 +461,30 @@
                     existingScores.push({ id: doc.id, ...doc.data() });
                 });
 
-                // Sort by score ascending to easily find the lowest
                 existingScores.sort((a, b) => a.score - b.score);
 
                 if (existingScores.length < 3) {
-                    // If less than 3 scores, just add the new one
                     scoresRef.add({
                         name: name,
                         kelas: kelas,
                         score: newScore,
                         category: selectedCategory,
+                        context: gameContext, 
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     });
                 } else {
-                    // If 3 scores exist, find the lowest one
                     const lowestScore = existingScores[0];
                     if (newScore > lowestScore.score) {
-                        // If new score is better than the worst score, replace it
                         const lowestScoreDocRef = scoresRef.doc(lowestScore.id);
                         
-                        // Use a batch write to delete the old and add the new one
                         const batch = db.batch();
                         batch.delete(lowestScoreDocRef);
-                        batch.set(scoresRef.doc(), { // create a new doc
+                        batch.set(scoresRef.doc(), { 
                             name: name,
                             kelas: kelas,
                             score: newScore,
                             category: selectedCategory,
+                            context: gameContext, 
                             timestamp: firebase.firestore.FieldValue.serverTimestamp()
                         });
 
@@ -499,7 +492,6 @@
                             console.log("Replaced lowest score with the new higher score.");
                         });
                     } else {
-                        // New score is not better than any of the top 3, do nothing
                         console.log("New score was not high enough to make the top 3.");
                     }
                 }
@@ -508,26 +500,29 @@
             });
         }
 
-
         function listenForScores() {
             if (!selectedCategory) {
                 document.querySelector('#leaderboard tbody').innerHTML = '<tr><td colspan="4">Pilih kategori.</td></tr>';
                 return;
             }
-            db.collection("scores").where("category", "==", selectedCategory).orderBy("score", "desc").limit(100)
-                .onSnapshot((querySnapshot) => {
-                    const leaderboardBody = document.querySelector('#leaderboard tbody');
-                    leaderboardBody.innerHTML = '';
-                    let rank = 1;
-                    if (querySnapshot.empty) {
-                        leaderboardBody.innerHTML = '<tr><td colspan="4">Tiada markah lagi.</td></tr>';
-                    } else {
-                        querySnapshot.forEach((doc) => {
-                            const s = doc.data();
-                            leaderboardBody.innerHTML += `<tr><td>${rank++}</td><td>${s.name}</td><td>${s.kelas}</td><td>${s.score}</td></tr>`;
-                        });
-                    }
-                });
+            db.collection("scores")
+              .where("category", "==", selectedCategory)
+              .where("context", "==", gameContext) 
+              .orderBy("score", "desc")
+              .limit(100)
+              .onSnapshot((querySnapshot) => {
+                  const leaderboardBody = document.querySelector('#leaderboard tbody');
+                  leaderboardBody.innerHTML = '';
+                  let rank = 1;
+                  if (querySnapshot.empty) {
+                      leaderboardBody.innerHTML = '<tr><td colspan="4">Tiada markah lagi.</td></tr>';
+                  } else {
+                      querySnapshot.forEach((doc) => {
+                          const s = doc.data();
+                          leaderboardBody.innerHTML += `<tr><td>${rank++}</td><td>${s.name}</td><td>${s.kelas}</td><td>${s.score}</td></tr>`;
+                      });
+                  }
+              });
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -536,4 +531,3 @@
     </script>
 </body>
 </html>
-
