@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ranking Top 3 Sifir (SKPTE)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #ffcc70, #f471b5, #cd34b5);
+            background-attachment: fixed;
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            color: #333;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            border: 4px solid #4b0082;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin: 0 0 10px 0;
+            color: #4b0082;
+            text-shadow: 1px 1px #ff6347;
+        }
+
+        .btn-back {
+            display: inline-block;
+            text-decoration: none;
+            padding: 10px 20px;
+            background-color: #FF6347;
+            color: white;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+
+        .btn-back:hover {
+            transform: scale(1.05);
+            background-color: #e55337;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .class-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-top: 5px solid #4b0082;
+        }
+
+        .class-title {
+            font-size: 20px;
+            color: #4b0082;
+            margin-top: 0;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: bold;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: #f471b5;
+            color: white;
+        }
+
+        td.nama-murid {
+            text-align: left;
+            text-transform: capitalize;
+            font-weight: bold;
+        }
+
+        .rank-1 { background-color: #ffd700; font-weight: bold; } /* Gold */
+        .rank-2 { background-color: #c0c0c0; font-weight: bold; } /* Silver */
+        .rank-3 { background-color: #cd7f32; font-weight: bold; } /* Bronze */
+
+        .credit {
+            text-align: center;
+            margin-top: 40px;
+            color: white;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>🏆 KEDUDUKAN TOP 3 SIFIR.PRO (SKPTE) 🏆</h1>
+        <p>Senarai markah tertinggi terkini mengikut kelas</p>
+        <a href="index.html" class="btn-back">⬅ Kembali ke Permainan</a>
+    </div>
+
+    <div class="grid-container" id="ranking-grid">
+        <!-- Jadual untuk setiap kelas akan di-generate di sini oleh JavaScript -->
+    </div>
+
+    <div class="credit">Created by FooneManika / SPEKTRA 2024</div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    
+    <script>
+        // Firebase Config (Sama seperti index.html)
+        const firebaseConfig = {
+          apiKey: "AIzaSyCi9OJDWllc3YG-6loSE_NAPW_XFL1rAko",
+          authDomain: "sifir-pro-leaderboard.firebaseapp.com",
+          projectId: "sifir-pro-leaderboard",
+          storageBucket: "sifir-pro-leaderboard.appspot.com",
+          messagingSenderId: "877152351941",
+          appId: "1:877152351941:web:101922b746e6e6173b22ac"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        const gameContext = "skpte"; 
+        
+        // Senarai kelas yang kita nak pamerkan
+        const senaraiKelas = [
+            "3 Inovatif", "3 Kreatif", 
+            "4 Inovatif", "4 Kreatif", 
+            "5 Inovatif", "5 Kreatif", 
+            "6 Inovatif", "6 Kreatif", 
+            "Guru", "Pelawat"
+        ];
+
+        // 1. Bina kotak (kad) jadual untuk setiap kelas di dalam HTML
+        const gridContainer = document.getElementById('ranking-grid');
+        senaraiKelas.forEach(kelas => {
+            const safeId = kelas.replace(/\s+/g, '-'); // Contoh: "3 Inovatif" jadi "3-Inovatif"
+            gridContainer.innerHTML += `
+                <div class="class-card">
+                    <h2 class="class-title">${kelas}</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th width="15%">Top</th>
+                                <th width="60%">Nama</th>
+                                <th width="25%">Markah</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-${safeId}">
+                            <tr><td colspan="3"><i>Memuat turun data...</i></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        });
+
+        // 2. Tarik data dari Firebase secara Live
+        function loadRankings() {
+            db.collection("scores")
+              .where("context", "==", gameContext)
+              .onSnapshot((querySnapshot) => {
+                  let allScores = [];
+                  querySnapshot.forEach((doc) => {
+                      allScores.push(doc.data());
+                  });
+
+                  // Susun markah dari Paling Tinggi ke Rendah
+                  allScores.sort((a, b) => b.score - a.score);
+
+                  // Kumpulkan data mengikut kelas
+                  let groupedByClass = {};
+                  senaraiKelas.forEach(k => groupedByClass[k] = []);
+
+                  allScores.forEach(s => {
+                      if(groupedByClass[s.kelas] !== undefined) {
+                          // Pastikan kita hanya ambil 1 markah tertinggi untuk murid yang sama (Elak duplicate nama)
+                          if(!groupedByClass[s.kelas].find(murid => murid.name === s.name)) {
+                              groupedByClass[s.kelas].push(s);
+                          }
+                      }
+                  });
+
+                  // Masukkan data Top 3 ke dalam jadual
+                  senaraiKelas.forEach(kelas => {
+                      const safeId = kelas.replace(/\s+/g, '-');
+                      const tbody = document.getElementById(`tbody-${safeId}`);
+                      tbody.innerHTML = ''; // Kosongkan jadual lama
+                      
+                      const top3 = groupedByClass[kelas].slice(0, 3); // Ambil 3 teratas sahaja
+
+                      if (top3.length === 0) {
+                          tbody.innerHTML = '<tr><td colspan="3" style="color:gray;">Belum ada rekod</td></tr>';
+                      } else {
+                          const warnaRank = ['rank-1', 'rank-2', 'rank-3'];
+                          const pingat = ['🥇', '🥈', '🥉'];
+                          
+                          top3.forEach((data, index) => {
+                              tbody.innerHTML += `
+                                  <tr class="${warnaRank[index]}">
+                                      <td>${pingat[index]} ${index + 1}</td>
+                                      <td class="nama-murid">${data.name}</td>
+                                      <td>${data.score}</td>
+                                  </tr>
+                              `;
+                          });
+                      }
+                  });
+              });
+        }
+
+        // Jalankan fungsi
+        loadRankings();
+    </script>
+</body>
+</html>
