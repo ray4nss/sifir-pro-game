@@ -1,206 +1,115 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ranking Top 10 Sifir (SKPTE)</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background: linear-gradient(135deg, #ffcc70, #f471b5, #cd34b5);
-            background-attachment: fixed;
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
-            color: #333;
-        }
+// 1. Senarai kelas (Sediakan data kelas dahulu)
+const senaraiKelas = [
+    "3 Inovatif", "3 Kreatif", 
+    "4 Inovatif", "4 Kreatif", 
+    "5 Inovatif", "5 Kreatif", 
+    "6 Inovatif", "6 Kreatif", 
+    "Guru", "Pelawat"
+];
 
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+const gameContext = "skpte"; 
 
-        .header {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            margin-bottom: 30px;
-            border: 4px solid #4b0082;
-        }
-
-        h1 {
-            font-size: 28px; /* Slightly reduced to fit the new longer title */
-            margin: 0 0 10px 0;
-            color: #4b0082;
-            text-shadow: 1px 1px #ff6347;
-        }
-
-        .btn-back {
-            display: inline-block;
-            text-decoration: none;
-            padding: 10px 20px;
-            background-color: #FF6347;
-            color: white;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: bold;
-            transition: transform 0.3s;
-        }
-
-        .btn-back:hover {
-            transform: scale(1.05);
-            background-color: #e55337;
-        }
-
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .class-card {
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            border-top: 5px solid #4b0082;
-        }
-
-        .class-title {
-            font-size: 18px; /* Reduced slightly */
-            color: #4b0082;
-            margin-top: 0;
-            margin-bottom: 10px;
-            text-align: center;
-            font-weight: bold;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 8px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 5px; /* Reduced padding to fit 10 rows nicely */
-            text-align: center;
-            border-bottom: 1px solid #ddd;
-            font-size: 12px; /* Smaller font for the list */
-        }
-
-        th {
-            background-color: #f471b5;
-            color: white;
-            padding: 8px 5px; /* Keep header a bit taller */
-        }
-
-        td.nama-murid {
-            text-align: left;
-            text-transform: capitalize;
-            font-weight: bold;
-            font-size: 12px; /* Smaller font */
-        }
-
-        .rank-1 { background-color: #ffd700; font-weight: bold; } /* Gold */
-        .rank-2 { background-color: #c0c0c0; font-weight: bold; } /* Silver */
-        .rank-3 { background-color: #cd7f32; font-weight: bold; } /* Bronze */
-        .rank-other { background-color: transparent; } /* Normal rows */
-
-        .credit {
-            text-align: center;
-            margin-top: 40px;
-            color: white;
-            font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-        }
-    </style>
-</head>
-<body>
-
-    <div class="header">
-        <h1>🏆 KEDUDUKAN TOP 10 sifirpro.com 2026 (SKPTe) 🏆</h1>
-        <p>Senarai markah tertinggi terkini mengikut kelas</p>
-        <a href="index.html" class="btn-back">⬅ Kembali ke Permainan</a>
-    </div>
-
-    <div class="grid-container" id="ranking-grid">
+// 2. Bina kotak (kad) jadual di skrin DAHULU
+const gridContainer = document.getElementById('ranking-grid');
+senaraiKelas.forEach(kelas => {
+    const safeId = kelas.replace(/\s+/g, '-'); 
+    gridContainer.innerHTML += `
+        <div class="class-card">
+            <h2 class="class-title">${kelas}</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th width="18%">Top</th>
+                        <th width="57%">Nama</th>
+                        <th width="25%">Markah</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody-${safeId}">
+                    <tr><td colspan="3" style="color:#666;"><i>Memuat turun data...</i></td></tr>
+                </tbody>
+            </table>
         </div>
+    `;
+});
 
-    <div class="credit">Created by FooneManika / SPEKTRA 2026</div>
-
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+// 3. Sambung ke Firebase & Tarik Data (SELEPAS UI dibina)
+try {
+    const firebaseConfig = {
+      apiKey: "AIzaSyCi9OJDWllc3YG-6loSE_NAPW_XFL1rAko",
+      authDomain: "sifir-pro-leaderboard.firebaseapp.com",
+      projectId: "sifir-pro-leaderboard",
+      storageBucket: "sifir-pro-leaderboard.appspot.com",
+      messagingSenderId: "877152351941",
+      appId: "1:877152351941:web:101922b746e6e6173b22ac"
+    };
     
-    <script>
-        // Firebase Config
-        const firebaseConfig = {
-          apiKey: "AIzaSyCi9OJDWllc3YG-6loSE_NAPW_XFL1rAko",
-          authDomain: "sifir-pro-leaderboard.firebaseapp.com",
-          projectId: "sifir-pro-leaderboard",
-          storageBucket: "sifir-pro-leaderboard.appspot.com",
-          messagingSenderId: "877152351941",
-          appId: "1:877152351941:web:101922b746e6e6173b22ac"
-        };
+    // Elak ralat jika firebase di-initialize lebih dari sekali
+    if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+    }
+    
+    const db = firebase.firestore();
 
-        const gameContext = "skpte"; 
-        
-        // Senarai kelas
-        const senaraiKelas = [
-            "3 Inovatif", "3 Kreatif", 
-            "4 Inovatif", "4 Kreatif", 
-            "5 Inovatif", "5 Kreatif", 
-            "6 Inovatif", "6 Kreatif", 
-            "Guru", "Pelawat"
-        ];
+    db.collection("scores")
+      .where("context", "==", gameContext)
+      .onSnapshot((querySnapshot) => {
+          let allScores = [];
+          querySnapshot.forEach((doc) => {
+              allScores.push(doc.data());
+          });
 
-        // 1. Bina kotak (kad) jadual
-        const gridContainer = document.getElementById('ranking-grid');
-        senaraiKelas.forEach(kelas => {
-            const safeId = kelas.replace(/\s+/g, '-'); 
-            gridContainer.innerHTML += `
-                <div class="class-card">
-                    <h2 class="class-title">${kelas}</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th width="18%">Top</th>
-                                <th width="57%">Nama</th>
-                                <th width="25%">Markah</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbody-${safeId}">
-                            <tr><td colspan="3"><i>Memuat turun data...</i></td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            `;
-        });
+          // Susun markah dari Paling Tinggi ke Rendah
+          allScores.sort((a, b) => b.score - a.score);
 
-        // 2. Tarik data dari Firebase secara Live
-        function loadRankings() {
-            db.collection("scores")
-              .where("context", "==", gameContext)
-              .onSnapshot((querySnapshot) => {
-                  let allScores = [];
-                  querySnapshot.forEach((doc) => {
-                      allScores.push(doc.data());
-                  });
+          // Kumpulkan data mengikut kelas
+          let groupedByClass = {};
+          senaraiKelas.forEach(k => groupedByClass[k] = []);
 
-                  // Susun markah dari Paling Tinggi ke Rendah
-                  allScores.sort((a, b) => b.score - a.score);
+          allScores.forEach(s => {
+              if(groupedByClass[s.kelas] !== undefined) {
+                  // Elak duplicate nama
+                  if(!groupedByClass[s.kelas].find(murid => murid.name === s.name)) {
+                      groupedByClass[s.kelas].push(s);
+                  }
+              }
+          });
 
-                  // Kumpulkan data mengikut kelas
-                  let groupedByClass = {};
-                  senaraiKelas.forEach(k => groupedByClass[k] = []);
+          // Masukkan data Top 10 ke dalam jadual
+          senaraiKelas.forEach(kelas => {
+              const safeId = kelas.replace(/\s+/g, '-');
+              const tbody = document.getElementById(`tbody-${safeId}`);
+              
+              if (tbody) {
+                  tbody.innerHTML = ''; 
+                  const top10 = groupedByClass[kelas].slice(0, 10); 
 
-                  allScores.forEach(s => {
-                      if(groupedByClass[s.kelas
+                  if (top10.length === 0) {
+                      tbody.innerHTML = '<tr><td colspan="3" style="color:gray;">Belum ada rekod</td></tr>';
+                  } else {
+                      top10.forEach((data, index) => {
+                          let rankDisplay = "";
+                          let rankClass = "";
+
+                          if (index === 0) { rankDisplay = "🥇 1"; rankClass = "rank-1"; }
+                          else if (index === 1) { rankDisplay = "🥈 2"; rankClass = "rank-2"; }
+                          else if (index === 2) { rankDisplay = "🥉 3"; rankClass = "rank-3"; }
+                          else { rankDisplay = index + 1; rankClass = "rank-other"; }
+
+                          tbody.innerHTML += `
+                              <tr class="${rankClass}">
+                                  <td>${rankDisplay}</td>
+                                  <td class="nama-murid">${data.name || "Tanpa Nama"}</td>
+                                  <td>${data.score || 0}</td>
+                              </tr>
+                          `;
+                      });
+                  }
+              }
+          });
+      }, (error) => {
+          console.error("Gagal menarik data dari Firebase:", error);
+      });
+
+} catch (error) {
+    console.error("Masalah sambungan ke Firebase:", error);
+}
