@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>sifir.pro (SKPTE)</title>
+    <title>sifir.pro</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -67,6 +67,27 @@
         .menu a:hover {
             transform: scale(1.05);
             background-color: #e55337;
+        }
+
+        /* Gaya baru untuk butang Top Ranking */
+        .btn-top-ranking {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 8px 15px;
+            background-color: #007bff; /* Warna biru */
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px; /* Saiz kecil */
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-top-ranking:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
         }
 
         #question, #masa, #markah {
@@ -224,7 +245,7 @@
 <body>
     
     <div id="menu-container" class="container">
-        <h1><span class="sifir">sifir</span><span class="dot">.</span><span class="pro">pro</span> (SKPTE)</h1>
+        <h1><span class="sifir">sifir</span><span class="dot">.</span><span class="pro">pro</span></h1>
         <div id="category-selection">
             <h3>Pilih Kategori Anda:</h3>
             <div class="menu">
@@ -234,6 +255,8 @@
                 <a onclick="selectCategory('Tahun 6')">Tahun 6</a>
                 <a onclick="selectCategory('Terbuka')">Terbuka (PIBG)</a>
             </div>
+            <!-- Butang Top Ranking Biru -->
+            <a href="ranking.html" class="btn-top-ranking">Top Ranking</a>
         </div>
         <div class="copyright">Copyright: FOONE MANIKA / SPEKTRA 2024</div>
     </div>
@@ -244,6 +267,7 @@
                 <label for="nama">Nama:</label><br>
                 <input type="text" id="nama" list="senarai-nama" required autocomplete="off">
                 <datalist id="senarai-nama">
+                    <!-- 4 KREATIF -->
                     <option value="AARONELL DWAYNE FREZER">
                     <option value="AISY ARYAN HADY BIN SUARDI">
                     <option value="ARLO ASHER GEORGE">
@@ -266,6 +290,7 @@
                     <option value="SUHANNA BINTI ABDULLAH">
                     <option value="VALENCIA RANDDY RIEKY">
 
+                    <!-- 5 INOVATIF -->
                     <option value="AHMAD HAZIQ BIN ABDULLAH">
                     <option value="ALECIA FARHANA BINTI MASRI">
                     <option value="ANNORA DHAFITA BINTI AZLIH">
@@ -297,6 +322,7 @@
                     <option value="SHERLYANA JEVERA BINTI JULIN">
                     <option value="VALENCIA VACHEL LAWRENCE">
 
+                    <!-- 5 KREATIF -->
                     <option value="ALVARO FABIAN">
                     <option value="AUDREY CARRENE LEONG">
                     <option value="AUNI ALIESSYA BINTI MOHD GAZALI">
@@ -320,6 +346,7 @@
                     <option value="ROSA EUPHRASIA DUALIS">
                     <option value="SYERIL VILSTER MARTIN">
 
+                    <!-- 6 INOVATIF -->
                     <option value="AIVEN ROSCELL BOMAN">
                     <option value="ARYARMANDO LARRY">
                     <option value="AYRLANCE SHELVARDO AYOND">
@@ -347,6 +374,7 @@
                     <option value="WESTINE WADE BIN WILMON">
                     <option value="WILLNA NEYSHA WILJO NICE GAIMIN">
 
+                    <!-- 6 KREATIF -->
                     <option value="ALCANDER ADRIELL ALEXANDER">
                     <option value="AZMIRUL ASWAD BIN ABDULLAH">
                     <option value="BYRON BRAVERY AVERY EARL GABU">
@@ -411,7 +439,7 @@
         </div>
 
         <div id="rankings">
-            <h3>Leaderboard (SKPTE):</h3> <table id="leaderboard">
+            <h3>Leaderboard:</h3> <table id="leaderboard">
                 <thead>
                     <tr><th>Rank</th><th>Name</th><th>Kelas</th><th>Score</th></tr>
                 </thead>
