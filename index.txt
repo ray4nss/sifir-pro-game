@@ -38,7 +38,7 @@
         }
 
         h1 {
-            font-size: 28px;
+            font-size: 56px; /* Saiz dibesarkan 2 kali ganda */
             margin-bottom: 20px;
             text-shadow: 2px 2px #ff6347; /* Tomato */
         }
@@ -245,7 +245,8 @@
 <body>
     
     <div id="menu-container" class="container">
-        <h1><span class="sifir">sifir</span><span class="dot">.</span><span class="pro">pro</span></h1>
+        <!-- Nama telah ditukar di sini -->
+        <h1><span class="sifir">sifirpro</span><span class="dot">.</span><span class="pro">com</span></h1>
         <div id="category-selection">
             <h3>Pilih Kategori Anda:</h3>
             <div class="menu">
