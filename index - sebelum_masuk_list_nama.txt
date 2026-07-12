@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>sifir.pro (SKPTE)</title>
     <style>
-        /* Semua CSS anda dari sebelum ini ada di sini... */
         body {
             font-family: Arial, sans-serif;
             display: flex;
@@ -301,7 +300,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     
     <script>
-        // Firebase Config (KEKAL SAMA)
+        // Firebase Config
         const firebaseConfig = {
           apiKey: "AIzaSyCi9OJDWllc3YG-6loSE_NAPW_XFL1rAko",
           authDomain: "sifir-pro-leaderboard.firebaseapp.com",
@@ -313,8 +312,8 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // ------ PERUBAHAN 1: TAMBAH CONTEXT BARU ------
-        const gameContext = "skpte"; // Ini label untuk leaderboard SKPTE
+        // CONTEXT BARU
+        const gameContext = "skpte"; 
 
         // Game variables
         let num1, num2, correctAnswer, score = 0, timeLeft = 60, timer, selectedCategory = '';
@@ -349,7 +348,6 @@
             listenForScores(); 
         }
 
-        // FUNGSI INI KEKAL SAMA, KERANA LOGIKNYA MASIH BETUL
         function filterKelasDropdown() {
             const kelasDropdown = document.getElementById('kelas');
             kelasDropdown.value = "";
@@ -445,7 +443,6 @@
             resetGame();
         }
         
-        // ------ PERUBAHAN 2: KEMASKINI FUNGSI 'saveScore' ------
         function saveScore(newScore) {
             const name = document.getElementById('nama').value.trim().toLowerCase();
             const kelas = document.getElementById('kelas').value;
@@ -453,11 +450,10 @@
             if (!name || !kelas) return;
 
             const scoresRef = db.collection("scores");
-            // Query kini juga menapis berdasarkan 'gameContext'
             const query = scoresRef.where("name", "==", name)
                                    .where("kelas", "==", kelas)
                                    .where("category", "==", selectedCategory)
-                                   .where("context", "==", gameContext); // <-- BARIS BARU
+                                   .where("context", "==", gameContext); 
 
             query.get().then(querySnapshot => {
                 const existingScores = [];
@@ -468,13 +464,12 @@
                 existingScores.sort((a, b) => a.score - b.score);
 
                 if (existingScores.length < 3) {
-                    // Markah baru juga disimpan dengan 'gameContext'
                     scoresRef.add({
                         name: name,
                         kelas: kelas,
                         score: newScore,
                         category: selectedCategory,
-                        context: gameContext, // <-- BARIS BARU
+                        context: gameContext, 
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     });
                 } else {
@@ -484,13 +479,12 @@
                         
                         const batch = db.batch();
                         batch.delete(lowestScoreDocRef);
-                        // Markah baru juga disimpan dengan 'gameContext'
                         batch.set(scoresRef.doc(), { 
                             name: name,
                             kelas: kelas,
                             score: newScore,
                             category: selectedCategory,
-                            context: gameContext, // <-- BARIS BARU
+                            context: gameContext, 
                             timestamp: firebase.firestore.FieldValue.serverTimestamp()
                         });
 
@@ -506,16 +500,14 @@
             });
         }
 
-        // ------ PERUBAHAN 3: KEMASKINI FUNGSI 'listenForScores' ------
         function listenForScores() {
             if (!selectedCategory) {
                 document.querySelector('#leaderboard tbody').innerHTML = '<tr><td colspan="4">Pilih kategori.</td></tr>';
                 return;
             }
-            // Query kini juga menapis berdasarkan 'gameContext'
             db.collection("scores")
               .where("category", "==", selectedCategory)
-              .where("context", "==", gameContext) // <-- BARIS BARU
+              .where("context", "==", gameContext) 
               .orderBy("score", "desc")
               .limit(100)
               .onSnapshot((querySnapshot) => {
