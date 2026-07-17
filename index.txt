@@ -626,7 +626,7 @@
             resetGame();
         }
         
-// FUNGSI SAVESCORE BAHARU (VERSI LEBIH KUKUH / BULLETPROOF)
+// FUNGSI SAVESCORE BAHARU (VERSI FORCE NUMBER)
         function saveScore(newScore) {
             const name = document.getElementById('nama').value.trim().toLowerCase();
             const kelas = document.getElementById('kelas').value;
@@ -634,49 +634,57 @@
             if (!name || !kelas) return;
 
             const scoresRef = db.collection("scores");
+            
+            // Cari rekod lama murid ini
             const query = scoresRef.where("name", "==", name)
                                    .where("kelas", "==", kelas)
                                    .where("category", "==", selectedCategory)
                                    .where("context", "==", gameContext); 
 
             query.get().then(querySnapshot => {
+                // Pastikan markah baru adalah NOMBOR yang sah
+                const markahBaru = Number(newScore) || 0;
+
                 if (querySnapshot.empty) {
-                    // Jika murid ini belum pernah main (Rekod Baharu)
+                    // Jika murid belum ada rekod langsung
                     scoresRef.add({
                         name: name,
                         kelas: kelas,
-                        score: newScore,
-                        attempts: 1, // Percubaan Pertama
+                        score: markahBaru,
+                        attempts: 1, 
                         category: selectedCategory,
                         context: gameContext, 
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     });
                 } else {
-                    // Jika sudah ada rekod, kita gabungkan semua data
                     let totalAttempts = 0;
-                    let highestScore = newScore;
+                    let highestScore = markahBaru; 
                     
                     const batch = db.batch();
 
-                    // 1. Baca semua rekod lama murid ini & jumlahkan percubaan
                     querySnapshot.forEach(doc => {
                         const data = doc.data();
-                        // Jika rekod lama tiada 'attempts', anggap ia 1
-                        totalAttempts += (data.attempts ? parseInt(data.attempts) : 1);
                         
-                        // Cari markah paling tinggi antara rekod lama dan markah baru
-                        if (data.score > highestScore) {
-                            highestScore = data.score;
+                        // PAKSA SISTEM BACA SEBAGAI NOMBOR (Elak ralat '90' > '100')
+                        const rekodMarkahLama = Number(data.score) || 0;
+                        const rekodCubaLama = Number(data.attempts) || 1;
+                        
+                        // Campurkan semua percubaan lama
+                        totalAttempts += rekodCubaLama;
+                        
+                        // Bandingkan markah: Ambil yang paling tinggi
+                        if (rekodMarkahLama > highestScore) {
+                            highestScore = rekodMarkahLama;
                         }
                         
-                        // Padam rekod lama ini
+                        // Bersihkan rekod lama dari database
                         batch.delete(doc.ref);
                     });
 
-                    // 2. Tambah +1 untuk permainan yang baru sahaja tamat ini
+                    // Tambah +1 percubaan untuk sesi yang baru tamat ini
                     totalAttempts += 1;
 
-                    // 3. Simpan sebagai SATU rekod baharu yang telah dikemas kini
+                    // Hasilkan 1 rekod baharu yang kemas dan tepat
                     const newDocRef = scoresRef.doc();
                     batch.set(newDocRef, {
                         name: name,
@@ -688,13 +696,13 @@
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     });
 
-                    // Laksanakan arahan padam dan simpan serentak
+                    // Hantar arahan kepada Firebase
                     batch.commit().then(() => {
-                        console.log("Rekod dikemas kini. Jumlah Cuba:", totalAttempts, "| Markah Tertinggi:", highestScore);
+                        console.log("UPDATE BERJAYA! Markah tertinggi:", highestScore, "| Jumlah cuba:", totalAttempts);
                     });
                 }
             }).catch(error => {
-                console.error("Ralat mengurus markah: ", error);
+                console.error("Ralat menghubungi Firebase: ", error);
             });
         }
 
