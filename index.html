@@ -626,7 +626,7 @@
             resetGame();
         }
         
-        // FUNGSI SAVESCORE BAHARU (1 REKOD PER MURID, KIRAAN 'CUBA')
+// FUNGSI SAVESCORE BAHARU (VERSI LEBIH KUKUH / BULLETPROOF)
         function saveScore(newScore) {
             const name = document.getElementById('nama').value.trim().toLowerCase();
             const kelas = document.getElementById('kelas').value;
@@ -652,32 +652,46 @@
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     });
                 } else {
-                    // Jika murid sudah ada rekod, kita guna rekod pertama yang ditemui
-                    const docRef = querySnapshot.docs[0].ref;
-                    const existingData = querySnapshot.docs[0].data();
+                    // Jika sudah ada rekod, kita gabungkan semua data
+                    let totalAttempts = 0;
+                    let highestScore = newScore;
                     
-                    // Tambah +1 pada jumlah percubaan (jika rekod lama tiada 'attempts', mula dengan 1+1=2)
-                    const newAttempts = (existingData.attempts || 1) + 1;
-                    
-                    // Hanya kemas kini skor jika markah terbaharu LEBIH TINGGI daripada markah lama
-                    const highestScore = Math.max(existingData.score, newScore);
+                    const batch = db.batch();
 
-                    docRef.update({
-                        score: highestScore,
-                        attempts: newAttempts,
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    }).then(() => {
-                        console.log("Rekod telah dikemas kini. Markah Tertinggi:", highestScore);
+                    // 1. Baca semua rekod lama murid ini & jumlahkan percubaan
+                    querySnapshot.forEach(doc => {
+                        const data = doc.data();
+                        // Jika rekod lama tiada 'attempts', anggap ia 1
+                        totalAttempts += (data.attempts ? parseInt(data.attempts) : 1);
+                        
+                        // Cari markah paling tinggi antara rekod lama dan markah baru
+                        if (data.score > highestScore) {
+                            highestScore = data.score;
+                        }
+                        
+                        // Padam rekod lama ini
+                        batch.delete(doc.ref);
                     });
 
-                    // [Fungsi Pembersihan] Jika secara tidak sengaja ada lebih dari 1 rekod untuk murid ini dari sistem lama, padam yang lain
-                    if (querySnapshot.size > 1) {
-                        const batch = db.batch();
-                        for(let i = 1; i < querySnapshot.size; i++) {
-                            batch.delete(querySnapshot.docs[i].ref);
-                        }
-                        batch.commit();
-                    }
+                    // 2. Tambah +1 untuk permainan yang baru sahaja tamat ini
+                    totalAttempts += 1;
+
+                    // 3. Simpan sebagai SATU rekod baharu yang telah dikemas kini
+                    const newDocRef = scoresRef.doc();
+                    batch.set(newDocRef, {
+                        name: name,
+                        kelas: kelas,
+                        score: highestScore,
+                        attempts: totalAttempts,
+                        category: selectedCategory,
+                        context: gameContext, 
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    // Laksanakan arahan padam dan simpan serentak
+                    batch.commit().then(() => {
+                        console.log("Rekod dikemas kini. Jumlah Cuba:", totalAttempts, "| Markah Tertinggi:", highestScore);
+                    });
                 }
             }).catch(error => {
                 console.error("Ralat mengurus markah: ", error);
