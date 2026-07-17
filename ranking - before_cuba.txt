@@ -106,7 +106,6 @@
             text-transform: capitalize;
             font-weight: bold;
             font-size: 12px;
-            padding-left: 8px;
         }
 
         .rank-1 { background-color: #ffd700; font-weight: bold; } /* Gold */
@@ -151,7 +150,7 @@
 
         const gameContext = "skpte"; 
 
-        // 2. Bina kotak (kad) jadual di skrin DAHULU (Ditambah kolum Cuba)
+        // 2. Bina kotak (kad) jadual di skrin DAHULU
         const gridContainer = document.getElementById('ranking-grid');
         senaraiKelas.forEach(kelas => {
             const safeId = kelas.replace(/\s+/g, '-'); 
@@ -161,14 +160,13 @@
                     <table>
                         <thead>
                             <tr>
-                                <th width="15%">Top</th>
-                                <th width="15%">Cuba</th>
-                                <th width="45%">Nama</th>
+                                <th width="18%">Top</th>
+                                <th width="57%">Nama</th>
                                 <th width="25%">Markah</th>
                             </tr>
                         </thead>
                         <tbody id="tbody-${safeId}">
-                            <tr><td colspan="4" style="color:#666;"><i>Memuat turun data...</i></td></tr>
+                            <tr><td colspan="3" style="color:#666;"><i>Memuat turun data...</i></td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -210,7 +208,7 @@
 
                   allScores.forEach(s => {
                       if(groupedByClass[s.kelas] !== undefined) {
-                          // Elak duplicate nama untuk murid yang sama (sebagai pelan sandaran)
+                          // Elak duplicate nama untuk murid yang sama
                           if(!groupedByClass[s.kelas].find(murid => murid.name === s.name)) {
                               groupedByClass[s.kelas].push(s);
                           }
@@ -227,7 +225,7 @@
                           const top10 = groupedByClass[kelas].slice(0, 10); 
 
                           if (top10.length === 0) {
-                              tbody.innerHTML = '<tr><td colspan="4" style="color:gray;">Belum ada rekod</td></tr>';
+                              tbody.innerHTML = '<tr><td colspan="3" style="color:gray;">Belum ada rekod</td></tr>';
                           } else {
                               top10.forEach((data, index) => {
                                   let rankDisplay = "";
@@ -237,14 +235,10 @@
                                   else if (index === 1) { rankDisplay = "🥈 2"; rankClass = "rank-2"; }
                                   else if (index === 2) { rankDisplay = "🥉 3"; rankClass = "rank-3"; }
                                   else { rankDisplay = index + 1; rankClass = "rank-other"; }
-                                  
-                                  // Tangkap nilai 'attempts', default kepada 1 jika tiada
-                                  const attemptsDisplay = data.attempts || 1;
 
                                   tbody.innerHTML += `
                                       <tr class="${rankClass}">
                                           <td>${rankDisplay}</td>
-                                          <td>${attemptsDisplay}</td>
                                           <td class="nama-murid">${data.name || "Tanpa Nama"}</td>
                                           <td>${data.score || 0}</td>
                                       </tr>
