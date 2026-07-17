@@ -38,9 +38,9 @@
         }
 
         h1 {
-            font-size: 56px; /* Saiz dibesarkan 2 kali ganda */
+            font-size: 56px; 
             margin-bottom: 20px;
-            text-shadow: 2px 2px #ff6347; /* Tomato */
+            text-shadow: 2px 2px #ff6347; 
         }
 
         .sifir { color: #4b0082; }
@@ -61,7 +61,7 @@
             font-size: 18px;
             transition: background-color 0.3s, transform 0.3s;
             cursor: pointer;
-            background-color: #FF6347; /* Tomato */
+            background-color: #FF6347; 
         }
 
         .menu a:hover {
@@ -69,16 +69,15 @@
             background-color: #e55337;
         }
 
-        /* Gaya baru untuk butang Top Ranking */
         .btn-top-ranking {
             display: inline-block;
             margin-top: 15px;
             padding: 8px 15px;
-            background-color: #007bff; /* Warna biru */
+            background-color: #007bff; 
             color: white;
             text-decoration: none;
             border-radius: 5px;
-            font-size: 14px; /* Saiz kecil */
+            font-size: 14px; 
             font-weight: bold;
             transition: background-color 0.3s, transform 0.3s;
             cursor: pointer;
@@ -195,16 +194,19 @@
             width: 100%;
             margin-top: 20px;
             border-collapse: collapse;
+            font-size: 14px; /* Saiz font dikecilkan sedikit supaya muat 5 kolum */
         }
 
         #leaderboard th, #leaderboard td {
             border: 1px solid #ddd;
-            padding: 8px;
+            padding: 8px 4px;
             text-align: center;
         }
 
-        #leaderboard td:nth-child(2) {
+        #leaderboard td:nth-child(3) { /* Kolum Nama */
             text-transform: capitalize;
+            text-align: left;
+            padding-left: 8px;
         }
 
         #leaderboard th {
@@ -236,10 +238,12 @@
             table-layout: fixed;
         }
 
-        #leaderboard th:nth-child(1), #leaderboard td:nth-child(1) { width: 20%; }
-        #leaderboard th:nth-child(2), #leaderboard td:nth-child(2) { width: 40%; }
-        #leaderboard th:nth-child(3), #leaderboard td:nth-child(3) { width: 20%; }
-        #leaderboard th:nth-child(4), #leaderboard td:nth-child(4) { width: 20%; }
+        /* SUSUNAN KELEBARAN KOLUM BAHARU */
+        #leaderboard th:nth-child(1), #leaderboard td:nth-child(1) { width: 12%; } /* Rank */
+        #leaderboard th:nth-child(2), #leaderboard td:nth-child(2) { width: 15%; } /* Cuba (Attempts) */
+        #leaderboard th:nth-child(3), #leaderboard td:nth-child(3) { width: 43%; } /* Name */
+        #leaderboard th:nth-child(4), #leaderboard td:nth-child(4) { width: 15%; } /* Kelas */
+        #leaderboard th:nth-child(5), #leaderboard td:nth-child(5) { width: 15%; } /* Score */
     </style>
 </head>
 <body>
@@ -266,6 +270,7 @@
                 <label for="nama">Nama:</label><br>
                 <input type="text" id="nama" list="senarai-nama" required autocomplete="off">
                 <datalist id="senarai-nama">
+                    <!-- 4 KREATIF -->
                     <option value="AARONELL DWAYNE FREZER">
                     <option value="AISY ARYAN HADY BIN SUARDI">
                     <option value="ARLO ASHER GEORGE">
@@ -288,6 +293,7 @@
                     <option value="SUHANNA BINTI ABDULLAH">
                     <option value="VALENCIA RANDDY RIEKY">
 
+                    <!-- 5 INOVATIF -->
                     <option value="AHMAD HAZIQ BIN ABDULLAH">
                     <option value="ALECIA FARHANA BINTI MASRI">
                     <option value="ANNORA DHAFITA BINTI AZLIH">
@@ -319,6 +325,7 @@
                     <option value="SHERLYANA JEVERA BINTI JULIN">
                     <option value="VALENCIA VACHEL LAWRENCE">
 
+                    <!-- 5 KREATIF -->
                     <option value="ALVARO FABIAN">
                     <option value="AUDREY CARRENE LEONG">
                     <option value="AUNI ALIESSYA BINTI MOHD GAZALI">
@@ -342,6 +349,7 @@
                     <option value="ROSA EUPHRASIA DUALIS">
                     <option value="SYERIL VILSTER MARTIN">
 
+                    <!-- 6 INOVATIF -->
                     <option value="AIVEN ROSCELL BOMAN">
                     <option value="ARYARMANDO LARRY">
                     <option value="AYRLANCE SHELVARDO AYOND">
@@ -369,6 +377,7 @@
                     <option value="WESTINE WADE BIN WILMON">
                     <option value="WILLNA NEYSHA WILJO NICE GAIMIN">
 
+                    <!-- 6 KREATIF -->
                     <option value="ALCANDER ADRIELL ALEXANDER">
                     <option value="AZMIRUL ASWAD BIN ABDULLAH">
                     <option value="BYRON BRAVERY AVERY EARL GABU">
@@ -433,9 +442,11 @@
         </div>
 
         <div id="rankings">
-            <h3>Leaderboard:</h3> <table id="leaderboard">
+            <h3>Leaderboard:</h3> 
+            <table id="leaderboard">
                 <thead>
-                    <tr><th>Rank</th><th>Name</th><th>Kelas</th><th>Score</th></tr>
+                    <!-- KOLUM 'CUBA' DITAMBAH DI SINI -->
+                    <tr><th>Rank</th><th>Cuba</th><th>Name</th><th>Kelas</th><th>Score</th></tr>
                 </thead>
                 <tbody></tbody>
             </table>
@@ -523,13 +534,10 @@
                 return;
             }
 
-            // --- FUNGSI TAPISAN NAMA ---
-            // Semak adakah pengguna ini bukan Guru dan bukan Pelawat
             if (kelasInput !== 'Guru' && kelasInput !== 'Pelawat') {
                 const senaraiOptions = document.querySelectorAll('#senarai-nama option');
                 let namaSah = false;
 
-                // Bandingkan input dengan senarai nama dalam datalist
                 for (let i = 0; i < senaraiOptions.length; i++) {
                     if (namaInput === senaraiOptions[i].value) {
                         namaSah = true;
@@ -537,13 +545,11 @@
                     }
                 }
 
-                // Jika nama ditaip sendiri dan tiada dalam senarai, sekat dari bermula
                 if (!namaSah) {
                     alert('Akses ditolak: Sila pilih nama anda yang betul dari senarai (dropdown).');
                     return; 
                 }
             }
-            // --- TAMAT FUNGSI TAPISAN NAMA ---
 
             setupArea.style.display = 'none';
             gamePlayArea.style.display = 'block';
@@ -620,6 +626,7 @@
             resetGame();
         }
         
+        // FUNGSI SAVESCORE BAHARU (1 REKOD PER MURID, KIRAAN 'CUBA')
         function saveScore(newScore) {
             const name = document.getElementById('nama').value.trim().toLowerCase();
             const kelas = document.getElementById('kelas').value;
@@ -633,53 +640,53 @@
                                    .where("context", "==", gameContext); 
 
             query.get().then(querySnapshot => {
-                const existingScores = [];
-                querySnapshot.forEach(doc => {
-                    existingScores.push({ id: doc.id, ...doc.data() });
-                });
-
-                existingScores.sort((a, b) => a.score - b.score);
-
-                if (existingScores.length < 3) {
+                if (querySnapshot.empty) {
+                    // Jika murid ini belum pernah main (Rekod Baharu)
                     scoresRef.add({
                         name: name,
                         kelas: kelas,
                         score: newScore,
+                        attempts: 1, // Percubaan Pertama
                         category: selectedCategory,
                         context: gameContext, 
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     });
                 } else {
-                    const lowestScore = existingScores[0];
-                    if (newScore > lowestScore.score) {
-                        const lowestScoreDocRef = scoresRef.doc(lowestScore.id);
-                        
-                        const batch = db.batch();
-                        batch.delete(lowestScoreDocRef);
-                        batch.set(scoresRef.doc(), { 
-                            name: name,
-                            kelas: kelas,
-                            score: newScore,
-                            category: selectedCategory,
-                            context: gameContext, 
-                            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                        });
+                    // Jika murid sudah ada rekod, kita guna rekod pertama yang ditemui
+                    const docRef = querySnapshot.docs[0].ref;
+                    const existingData = querySnapshot.docs[0].data();
+                    
+                    // Tambah +1 pada jumlah percubaan (jika rekod lama tiada 'attempts', mula dengan 1+1=2)
+                    const newAttempts = (existingData.attempts || 1) + 1;
+                    
+                    // Hanya kemas kini skor jika markah terbaharu LEBIH TINGGI daripada markah lama
+                    const highestScore = Math.max(existingData.score, newScore);
 
-                        batch.commit().then(() => {
-                            console.log("Replaced lowest score with the new higher score.");
-                        });
-                    } else {
-                        console.log("New score was not high enough to make the top 3.");
+                    docRef.update({
+                        score: highestScore,
+                        attempts: newAttempts,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    }).then(() => {
+                        console.log("Rekod telah dikemas kini. Markah Tertinggi:", highestScore);
+                    });
+
+                    // [Fungsi Pembersihan] Jika secara tidak sengaja ada lebih dari 1 rekod untuk murid ini dari sistem lama, padam yang lain
+                    if (querySnapshot.size > 1) {
+                        const batch = db.batch();
+                        for(let i = 1; i < querySnapshot.size; i++) {
+                            batch.delete(querySnapshot.docs[i].ref);
+                        }
+                        batch.commit();
                     }
                 }
             }).catch(error => {
-                console.error("Error managing scores: ", error);
+                console.error("Ralat mengurus markah: ", error);
             });
         }
 
         function listenForScores() {
             if (!selectedCategory) {
-                document.querySelector('#leaderboard tbody').innerHTML = '<tr><td colspan="4">Pilih kategori.</td></tr>';
+                document.querySelector('#leaderboard tbody').innerHTML = '<tr><td colspan="5">Pilih kategori.</td></tr>';
                 return;
             }
             db.collection("scores")
@@ -692,11 +699,13 @@
                   leaderboardBody.innerHTML = '';
                   let rank = 1;
                   if (querySnapshot.empty) {
-                      leaderboardBody.innerHTML = '<tr><td colspan="4">Tiada markah lagi.</td></tr>';
+                      leaderboardBody.innerHTML = '<tr><td colspan="5">Tiada markah lagi.</td></tr>';
                   } else {
                       querySnapshot.forEach((doc) => {
                           const s = doc.data();
-                          leaderboardBody.innerHTML += `<tr><td>${rank++}</td><td>${s.name}</td><td>${s.kelas}</td><td>${s.score}</td></tr>`;
+                          // Ambil jumlah 'attempts'. Jika rekod lama tiada data ini, kita paparkan 1.
+                          const attemptsDisplay = s.attempts || 1;
+                          leaderboardBody.innerHTML += `<tr><td>${rank++}</td><td>${attemptsDisplay}</td><td>${s.name}</td><td>${s.kelas}</td><td>${s.score}</td></tr>`;
                       });
                   }
               });
