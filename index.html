@@ -38,9 +38,9 @@
         }
 
         h1 {
-            font-size: 56px; 
+            font-size: 56px; /* Saiz dibesarkan 2 kali ganda */
             margin-bottom: 20px;
-            text-shadow: 2px 2px #ff6347; 
+            text-shadow: 2px 2px #ff6347; /* Tomato */
         }
 
         .sifir { color: #4b0082; }
@@ -61,7 +61,7 @@
             font-size: 18px;
             transition: background-color 0.3s, transform 0.3s;
             cursor: pointer;
-            background-color: #FF6347; 
+            background-color: #FF6347; /* Tomato */
         }
 
         .menu a:hover {
@@ -69,15 +69,16 @@
             background-color: #e55337;
         }
 
+        /* Gaya baru untuk butang Top Ranking */
         .btn-top-ranking {
             display: inline-block;
             margin-top: 15px;
             padding: 8px 15px;
-            background-color: #007bff; 
+            background-color: #007bff; /* Warna biru */
             color: white;
             text-decoration: none;
             border-radius: 5px;
-            font-size: 14px; 
+            font-size: 14px; /* Saiz kecil */
             font-weight: bold;
             transition: background-color 0.3s, transform 0.3s;
             cursor: pointer;
@@ -194,19 +195,16 @@
             width: 100%;
             margin-top: 20px;
             border-collapse: collapse;
-            font-size: 14px; /* Saiz font dikecilkan sedikit supaya muat 5 kolum */
         }
 
         #leaderboard th, #leaderboard td {
             border: 1px solid #ddd;
-            padding: 8px 4px;
+            padding: 8px;
             text-align: center;
         }
 
-        #leaderboard td:nth-child(3) { /* Kolum Nama */
+        #leaderboard td:nth-child(2) {
             text-transform: capitalize;
-            text-align: left;
-            padding-left: 8px;
         }
 
         #leaderboard th {
@@ -238,17 +236,16 @@
             table-layout: fixed;
         }
 
-        /* SUSUNAN KELEBARAN KOLUM BAHARU */
-        #leaderboard th:nth-child(1), #leaderboard td:nth-child(1) { width: 12%; } /* Rank */
-        #leaderboard th:nth-child(2), #leaderboard td:nth-child(2) { width: 15%; } /* Cuba (Attempts) */
-        #leaderboard th:nth-child(3), #leaderboard td:nth-child(3) { width: 43%; } /* Name */
-        #leaderboard th:nth-child(4), #leaderboard td:nth-child(4) { width: 15%; } /* Kelas */
-        #leaderboard th:nth-child(5), #leaderboard td:nth-child(5) { width: 15%; } /* Score */
+        #leaderboard th:nth-child(1), #leaderboard td:nth-child(1) { width: 20%; }
+        #leaderboard th:nth-child(2), #leaderboard td:nth-child(2) { width: 40%; }
+        #leaderboard th:nth-child(3), #leaderboard td:nth-child(3) { width: 20%; }
+        #leaderboard th:nth-child(4), #leaderboard td:nth-child(4) { width: 20%; }
     </style>
 </head>
 <body>
     
     <div id="menu-container" class="container">
+        <!-- Nama telah ditukar di sini -->
         <h1><span class="sifir">sifirpro</span><span class="dot">.</span><span class="pro">com</span></h1>
         <div id="category-selection">
             <h3>Pilih Kategori Anda:</h3>
@@ -259,6 +256,7 @@
                 <a onclick="selectCategory('Tahun 6')">Tahun 6</a>
                 <a onclick="selectCategory('Terbuka')">Terbuka (PIBG)</a>
             </div>
+            <!-- Butang Top Ranking Biru -->
             <a href="ranking.html" class="btn-top-ranking">Top Ranking</a>
         </div>
         <div class="copyright">Copyright: FOONE MANIKA / SPEKTRA 2024</div>
@@ -442,11 +440,9 @@
         </div>
 
         <div id="rankings">
-            <h3>Leaderboard:</h3> 
-            <table id="leaderboard">
+            <h3>Leaderboard:</h3> <table id="leaderboard">
                 <thead>
-                    <!-- KOLUM 'CUBA' DITAMBAH DI SINI -->
-                    <tr><th>Rank</th><th>Cuba</th><th>Name</th><th>Kelas</th><th>Score</th></tr>
+                    <tr><th>Rank</th><th>Name</th><th>Kelas</th><th>Score</th></tr>
                 </thead>
                 <tbody></tbody>
             </table>
@@ -526,31 +522,10 @@
         }
 
         function startGameSession() {
-            const namaInput = document.getElementById('nama').value.trim();
-            const kelasInput = document.getElementById('kelas').value;
-
-            if (!namaInput || !kelasInput) {
+            if (!document.getElementById('nama').value || !document.getElementById('kelas').value) {
                 alert('Sila masukkan Nama dan Kelas.');
                 return;
             }
-
-            if (kelasInput !== 'Guru' && kelasInput !== 'Pelawat') {
-                const senaraiOptions = document.querySelectorAll('#senarai-nama option');
-                let namaSah = false;
-
-                for (let i = 0; i < senaraiOptions.length; i++) {
-                    if (namaInput === senaraiOptions[i].value) {
-                        namaSah = true;
-                        break;
-                    }
-                }
-
-                if (!namaSah) {
-                    alert('Akses ditolak: Sila pilih nama anda yang betul dari senarai (dropdown).');
-                    return; 
-                }
-            }
-
             setupArea.style.display = 'none';
             gamePlayArea.style.display = 'block';
             document.getElementById('start').disabled = true;
@@ -626,7 +601,6 @@
             resetGame();
         }
         
-// FUNGSI SAVESCORE BAHARU (VERSI FORCE NUMBER)
         function saveScore(newScore) {
             const name = document.getElementById('nama').value.trim().toLowerCase();
             const kelas = document.getElementById('kelas').value;
@@ -634,81 +608,59 @@
             if (!name || !kelas) return;
 
             const scoresRef = db.collection("scores");
-            
-            // Cari rekod lama murid ini
             const query = scoresRef.where("name", "==", name)
                                    .where("kelas", "==", kelas)
                                    .where("category", "==", selectedCategory)
                                    .where("context", "==", gameContext); 
 
             query.get().then(querySnapshot => {
-                // Pastikan markah baru adalah NOMBOR yang sah
-                const markahBaru = Number(newScore) || 0;
+                const existingScores = [];
+                querySnapshot.forEach(doc => {
+                    existingScores.push({ id: doc.id, ...doc.data() });
+                });
 
-                if (querySnapshot.empty) {
-                    // Jika murid belum ada rekod langsung
+                existingScores.sort((a, b) => a.score - b.score);
+
+                if (existingScores.length < 3) {
                     scoresRef.add({
                         name: name,
                         kelas: kelas,
-                        score: markahBaru,
-                        attempts: 1, 
+                        score: newScore,
                         category: selectedCategory,
                         context: gameContext, 
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
                     });
                 } else {
-                    let totalAttempts = 0;
-                    let highestScore = markahBaru; 
-                    
-                    const batch = db.batch();
-
-                    querySnapshot.forEach(doc => {
-                        const data = doc.data();
+                    const lowestScore = existingScores[0];
+                    if (newScore > lowestScore.score) {
+                        const lowestScoreDocRef = scoresRef.doc(lowestScore.id);
                         
-                        // PAKSA SISTEM BACA SEBAGAI NOMBOR (Elak ralat '90' > '100')
-                        const rekodMarkahLama = Number(data.score) || 0;
-                        const rekodCubaLama = Number(data.attempts) || 1;
-                        
-                        // Campurkan semua percubaan lama
-                        totalAttempts += rekodCubaLama;
-                        
-                        // Bandingkan markah: Ambil yang paling tinggi
-                        if (rekodMarkahLama > highestScore) {
-                            highestScore = rekodMarkahLama;
-                        }
-                        
-                        // Bersihkan rekod lama dari database
-                        batch.delete(doc.ref);
-                    });
+                        const batch = db.batch();
+                        batch.delete(lowestScoreDocRef);
+                        batch.set(scoresRef.doc(), { 
+                            name: name,
+                            kelas: kelas,
+                            score: newScore,
+                            category: selectedCategory,
+                            context: gameContext, 
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                        });
 
-                    // Tambah +1 percubaan untuk sesi yang baru tamat ini
-                    totalAttempts += 1;
-
-                    // Hasilkan 1 rekod baharu yang kemas dan tepat
-                    const newDocRef = scoresRef.doc();
-                    batch.set(newDocRef, {
-                        name: name,
-                        kelas: kelas,
-                        score: highestScore,
-                        attempts: totalAttempts,
-                        category: selectedCategory,
-                        context: gameContext, 
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-
-                    // Hantar arahan kepada Firebase
-                    batch.commit().then(() => {
-                        console.log("UPDATE BERJAYA! Markah tertinggi:", highestScore, "| Jumlah cuba:", totalAttempts);
-                    });
+                        batch.commit().then(() => {
+                            console.log("Replaced lowest score with the new higher score.");
+                        });
+                    } else {
+                        console.log("New score was not high enough to make the top 3.");
+                    }
                 }
             }).catch(error => {
-                console.error("Ralat menghubungi Firebase: ", error);
+                console.error("Error managing scores: ", error);
             });
         }
 
         function listenForScores() {
             if (!selectedCategory) {
-                document.querySelector('#leaderboard tbody').innerHTML = '<tr><td colspan="5">Pilih kategori.</td></tr>';
+                document.querySelector('#leaderboard tbody').innerHTML = '<tr><td colspan="4">Pilih kategori.</td></tr>';
                 return;
             }
             db.collection("scores")
@@ -721,13 +673,11 @@
                   leaderboardBody.innerHTML = '';
                   let rank = 1;
                   if (querySnapshot.empty) {
-                      leaderboardBody.innerHTML = '<tr><td colspan="5">Tiada markah lagi.</td></tr>';
+                      leaderboardBody.innerHTML = '<tr><td colspan="4">Tiada markah lagi.</td></tr>';
                   } else {
                       querySnapshot.forEach((doc) => {
                           const s = doc.data();
-                          // Ambil jumlah 'attempts'. Jika rekod lama tiada data ini, kita paparkan 1.
-                          const attemptsDisplay = s.attempts || 1;
-                          leaderboardBody.innerHTML += `<tr><td>${rank++}</td><td>${attemptsDisplay}</td><td>${s.name}</td><td>${s.kelas}</td><td>${s.score}</td></tr>`;
+                          leaderboardBody.innerHTML += `<tr><td>${rank++}</td><td>${s.name}</td><td>${s.kelas}</td><td>${s.score}</td></tr>`;
                       });
                   }
               });
